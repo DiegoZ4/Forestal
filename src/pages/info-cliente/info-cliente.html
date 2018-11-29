@@ -116,9 +116,7 @@
 
         <ion-item>
           <p>{{ myPhoto }}</p>
-          <p>{{ imageData }}</p>
           <img src="{{ myPhoto }}" alt="">
-          <img src="{{ imageData }}" alt="">
         </ion-item>
 
         <pre>{{ formaInforme.value | json }}</pre>
@@ -133,7 +131,7 @@
         </ion-item>
 
         <ion-item>
-          <button style="margin-bottom:20px" (click)="takePhoto()"
+          <button style="margin-bottom:20px" (click)="takePhotoCamion()"
                   color="primary" ion-button block>Sacar foto del Camión</button>
         </ion-item>
 
@@ -145,30 +143,73 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'kittens'">
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="assets/img/thumbnail-kitten-1.jpg">
-        </ion-thumbnail>
-        <h2>Luna</h2>
-      </ion-item>
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="assets/img/thumbnail-kitten-3.jpg">
-        </ion-thumbnail>
-        <h2>Milo</h2>
-      </ion-item>
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="assets/img/thumbnail-kitten-4.jpg">
-        </ion-thumbnail>
-        <h2>Bandit</h2>
-      </ion-item>
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="assets/img/thumbnail-kitten-2.jpg">
-        </ion-thumbnail>
-        <h2>Nala</h2>
-      </ion-item>
+      <form [formGroup]="formaLinea">
+
+        <pre>{{ formaLinea.value | json }}</pre>
+
+        <ion-item>
+          <ion-label floating>Rodal</ion-label>
+          <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Tendida</ion-label>
+          <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>
+        </ion-item>
+
+
+
+        <ion-item>
+          <p>{{ myPhoto2 }}</p>
+          <img src="{{ myPhoto2 }}" alt="">
+        </ion-item>
+
+        <pre>{{ formaLinea.value | json }}</pre>
+        <ion-item>
+          <ion-label floating>Coordenadas GPS</ion-label>
+          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button style="margin-bottom:20px" (click)="takeGPS()"
+                  color="primary" ion-button block>Tomar Coordenadas GPS</button>
+        </ion-item>
+
+        <ion-item>
+          <button style="margin-bottom:20px" (click)="takePhoto()"
+                  color="primary" ion-button block>Sacar foto</button>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Diametro 1</ion-label>
+          <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Diametro 2</ion-label>
+          <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Largo</ion-label>
+          <ion-input type="text" formControlName="largo" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Volumen</ion-label>
+          <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Código Rollo</ion-label>
+          <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button full primary (click)="saveLocal()">Guardar Informe</button>
+        </ion-item>
+
+      </form>
     </ion-list>
 
 

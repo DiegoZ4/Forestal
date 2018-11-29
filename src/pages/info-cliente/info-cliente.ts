@@ -38,8 +38,10 @@ export class InfoClientePage {
   faltantes = [];
 
   formaInforme:FormGroup;
+  formaLinea:FormGroup;
 
   myPhoto:any;
+  myPhoto2:any;
 
   requerimientos=[];
 
@@ -92,12 +94,26 @@ export class InfoClientePage {
     //
 
     this.formaInforme = new FormGroup({
-      id: new FormControl(this.id, Validators.required),
       nro_requerimiento: new FormControl(this.id, Validators.required),
       fecha: new FormControl(this.fechaActualParse, Validators.required),
       gps: new FormControl('', Validators.required),
       foto: new FormControl('', Validators.required),
       remito: new FormControl('', Validators.required)
+    })
+
+    this.formaLinea = new FormGroup({
+      nro_requerimiento: new FormControl(this.id, Validators.required),
+      gps: new FormControl('', Validators.required),
+      foto: new FormControl('', Validators.required),
+      rodal: new FormControl('', Validators.required),
+      tendida: new FormControl('', Validators.required),
+      rollo: new FormControl('', Validators.required),
+      especie: new FormControl('', Validators.required),
+      diametro_1: new FormControl('', Validators.required),
+      diametro_2: new FormControl('', Validators.required),
+      largo: new FormControl('', Validators.required),
+      volumen: new FormControl('', Validators.required),
+      codigo_rollo: new FormControl('', Validators.required)
     })
 
     this.requerimiento =  this.requerimientos.find( x => x.id === this.id );
@@ -135,11 +151,46 @@ export class InfoClientePage {
     });
   }
 
+  takeGPS(){
+    this.options = {
+        enableHighAccuracy : true
+    };
+
+    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
+
+        this.currentPos = pos;
+        console.log(pos);
+
+        this.formaLinea.controls['gps'].setValue(pos.coords.latitude+' '+pos.coords.longitude)
+    },(err : PositionError)=>{
+        console.log("error : " + err.message);
+    });
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad InfoClientePage');
   }
 
   takePhoto(){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64 (DATA_URL):
+     // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
+     alert(imageData)
+     this.myPhoto2 = imageData;
+    }, (err) => {
+     // Handle error
+    });
+  }
+
+  takePhotoCamion(){
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -217,21 +268,6 @@ export class InfoClientePage {
     console.log(JSON.parse(localStorage.getItem('encabezados')));
     console.log(this.formaInforme.value)
     console.log(encabezados)
-    // if(encabezados){
-
-    // }else{
-    //
-    // }
-
-    // let index = 0
-    // for (var requerimiento of this.requerimientos) {
-    //   console.log(index)
-    //  if (requerimiento.id == this.id) {
-    //     this.requerimientos[index] = this.formaInforme.value;
-    //
-    //  }
-    //  index++;
-    // }
 
     localStorage.setItem('encabezados', JSON.stringify(encabezados))
     console.log(encabezados);
