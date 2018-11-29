@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-navbar color=primary>
+    <ion-title>
+      Información del Requerimiento
+    </ion-title>
+  </ion-navbar>
+<!--
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="pet">
+      <ion-segment-button value="pagos">
+        Cuentas Corrientes
+      </ion-segment-button>
+      <ion-segment-button value="notas">
+        Prov/Compr
+      </ion-segment-button>
+      <ion-segment-button value="descargar">
+        Prov/NC
+      </ion-segment-button>
+      <ion-segment-button value="faltantes">
+        Prov/Falt
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar> -->
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Instrumento Legal</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.instrumento_legal}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Nomenclatura Catastral</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.nomenclatura_catastral}}</div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Cuit Titular</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_titular}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Lote Nro.</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.lote_nro}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Cuit Obrajero</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_obrajero}}</div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Guia Nro.</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.guia_nro}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Volumen A</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_A}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Volumen B</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_B}}</div>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <div style="font-weight:600; font-size:13pt">Volumen C</div>
+          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_C}}</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="pet">
+      <ion-segment-button value="puppies">
+        Encabezado
+      </ion-segment-button>
+      <ion-segment-button value="kittens">
+        Informes
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <div [ngSwitch]="pet">
+    <ion-list *ngSwitchCase="'puppies'">
+      <form [formGroup]="formaInforme">
+
+        <ion-item>
+          <ion-label floating>Fecha</ion-label>
+          <ion-input type="date" formControlName="fecha" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Remito</ion-label>
+          <ion-input type="text" formControlName="remito" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <p>{{ myPhoto }}</p>
+          <p>{{ imageData }}</p>
+          <img src="{{ myPhoto }}" alt="">
+          <img src="{{ imageData }}" alt="">
+        </ion-item>
+
+        <pre>{{ formaInforme.value | json }}</pre>
+        <ion-item>
+          <ion-label floating>Coordenadas GPS del Camión</ion-label>
+          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button style="margin-bottom:20px" (click)="takeGPSCamion()"
+                  color="primary" ion-button block>Tomar Coordenadas GPS del Camión</button>
+        </ion-item>
+
+        <ion-item>
+          <button style="margin-bottom:20px" (click)="takePhoto()"
+                  color="primary" ion-button block>Sacar foto del Camión</button>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button full primary (click)="saveLocal()">Guardar Informe</button>
+        </ion-item>
+
+      </form>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'kittens'">
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="assets/img/thumbnail-kitten-1.jpg">
+        </ion-thumbnail>
+        <h2>Luna</h2>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="assets/img/thumbnail-kitten-3.jpg">
+        </ion-thumbnail>
+        <h2>Milo</h2>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="assets/img/thumbnail-kitten-4.jpg">
+        </ion-thumbnail>
+        <h2>Bandit</h2>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="assets/img/thumbnail-kitten-2.jpg">
+        </ion-thumbnail>
+        <h2>Nala</h2>
+      </ion-item>
+    </ion-list>
+
+
+  </div>
+
+
+</ion-content>

@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-navbar hideBackButton color=primary>
+    <ion-title>
+      {{nombre}}
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      Lista de Clientes
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card color=primary *ngIf="vta">
+    <ion-card-content>
+      VENTA TOTAL ACTUAL: {{ vta }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <button ion-item *ngFor="let item of datosPagos" (click)="goToMyPage(item.id)">
+      <ion-icon name="ios-briefcase-outline" item-start></ion-icon>
+      {{item.razon}}
+    </button>
+
+  </ion-list>
+</ion-content>

@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color=primary>
+    <ion-title>
+      Informes
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+
+    <ion-card-content color="primary">
+      No se encuentran informes. Sincronice la aplicación para comenzar a trabajar
+    </ion-card-content>
+
+  </ion-card>
+
+  <div padding *ngIf="!sincronizado">
+    <button ion-button icon-start block (click)="sincronizar()">
+      <ion-icon name="ios-cloud-download"></ion-icon>
+      Descargar información
+    </button>
+  </div>
+
+  <div padding *ngIf="sincronizado">
+    <button ion-button color="secondary" icon-start block (click)="sincronizarUp()">
+      <ion-icon name="ios-cloud-upload"></ion-icon>
+      Subir información
+    </button>
+  </div>
+
+  <ion-list>
+    <ion-item *ngFor="let requerimiento of requerimientos">
+     <h2>{{requerimiento.lote}}</h2>
+     <p>{{requerimiento.nomenclatura_catastral}}</p>
+     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver requerimiento</button>
+   </ion-item>
+  </ion-list>
+</ion-content>
