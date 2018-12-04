@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { ServicesLoginProvider } from '../../providers/services-login/services-login';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
+
 
 import { File } from '@ionic-native/file';
 
@@ -23,6 +24,10 @@ import { File } from '@ionic-native/file';
   templateUrl: 'info-cliente.html',
 })
 export class InfoClientePage {
+  encabezado: any;
+  encabezados: any;
+  especies: any;
+  informes: any;
   requerimiento: any;
 
   id = 0;
@@ -59,35 +64,27 @@ export class InfoClientePage {
     public navParams: NavParams,
     private _login:ServicesLoginProvider,
     private geolocation: Geolocation,
+    private geolocation2: Geolocation,
     private camera: Camera,
     private transfer: FileTransfer,
     private file: File,
-    private loadingCtrl:LoadingController
+    private loadingCtrl:LoadingController,
+    public toastCtrl: ToastController
   ) {
     console.log(this.fechaActualParse);
 
     this.requerimientos = JSON.parse(localStorage.getItem('requerimientos'));
+    this.informes = JSON.parse(localStorage.getItem('informes'));
 
-    this.geolocation.getCurrentPosition().then((resp) => {
-     // resp.coords.latitude
-     // resp.coords.longitude
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      console.log('latitude : ', data.coords.latitude);
-      console.log('longitude : ', data.coords.longitude );
-
-
-     // data can be a set of coordinates, or an error (if an error occurred).
-     // data.coords.latitude
-     // data.coords.longitude
-    });
 
     console.log( this.navParams.get('id'));
     this.id = this.navParams.get('id');
+
+    this._login.getEspecies()
+        .subscribe( (resp:any)=>{
+          this.especies = resp;
+          console.log(this.especies)
+        })
 
     // let dataStorage =  JSON.parse(localStorage.getItem('userData'))
     // this.idVendedor = dataStorage.id;
@@ -100,6 +97,14 @@ export class InfoClientePage {
       foto: new FormControl('', Validators.required),
       remito: new FormControl('', Validators.required)
     })
+
+    if(this.encabezados = JSON.parse(localStorage.getItem('encabezados'))){
+      console.log(this.encabezados)
+        this.encabezado =  this.encabezados.find( x => x.nro_requerimiento === this.id );
+        this.formaInforme.controls['fecha'].setValue(this.encabezado.fecha);
+        this.formaInforme.controls['gps'].setValue(this.encabezado.gps);
+        this.formaInforme.controls['remito'].setValue(this.encabezado.remito);
+    }
 
     this.formaLinea = new FormGroup({
       nro_requerimiento: new FormControl(this.id, Validators.required),
@@ -136,35 +141,33 @@ export class InfoClientePage {
   }
 
   takeGPSCamion(){
-    this.options = {
-        enableHighAccuracy : true
-    };
-
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;
-        console.log(pos);
-
-        this.formaInforme.controls['gps'].setValue(pos.coords.latitude+' '+pos.coords.longitude)
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
+    this.geolocation.getCurrentPosition().then((resp) => {
+     // resp.coords.latitude
+     // resp.coords.longitude
+     console.log(resp.coords);
+     this.formaInforme.controls['gps'].setValue(resp.coords.latitude+' '+resp.coords.longitude)
+    }).catch((error) => {
+      console.log('Error getting location', error);
     });
+
+    // Clear watch
+    // navigator.geolocation.clearWatch(watch);
   }
 
   takeGPS(){
-    this.options = {
-        enableHighAccuracy : true
-    };
 
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;
-        console.log(pos);
-
-        this.formaLinea.controls['gps'].setValue(pos.coords.latitude+' '+pos.coords.longitude)
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
+    this.geolocation2.getCurrentPosition().then((resp) => {
+     // resp.coords.latitude
+     // resp.coords.longitude
+     console.log(resp.coords);
+     this.formaLinea.controls['gps'].setValue(resp.coords.latitude+' '+resp.coords.longitude);
+    }).catch((error) => {
+      console.log('Error getting location', error);
     });
+
+
+    // Clear watch
+    // navigator.geolocation.clearWatch(watch);
   }
 
   ionViewDidLoad() {
@@ -269,8 +272,49 @@ export class InfoClientePage {
     console.log(this.formaInforme.value)
     console.log(encabezados)
 
-    localStorage.setItem('encabezados', JSON.stringify(encabezados))
+    if(localStorage.setItem('encabezados', JSON.stringify(encabezados))){
+      const toast = this.toastCtrl.create({
+        message: 'User was added successfully',
+        duration: 3000
+      });
+      toast.present();
+    }
+
     console.log(encabezados);
+  }
+
+  saveLocalInforme(){
+    let informes = [];
+    informes = JSON.parse(localStorage.getItem('informes')) || [];
+
+    // if(informes.find( inf => inf.nro_requerimiento === this.id )){
+    //   console.log("ya hay un informe");
+    //
+    //   informes.forEach((element, index) => {
+    //       if(element.nro_requerimiento === this.id) {
+    //           informes.push(this.formaLinea.value);
+    //       }
+    //   });
+    // }else{
+    //   console.log('no hay informes')
+    //   informes.push(this.formaLinea.value);
+    // }
+
+    informes.push(this.formaLinea.value);
+
+    console.log(JSON.parse(localStorage.getItem('informes')));
+    console.log(this.formaLinea.value)
+    console.log(informes)
+
+    localStorage.setItem('informes', JSON.stringify(informes));
+
+    const toast = this.toastCtrl.create({
+        message: 'User was added successfully',
+        duration: 3000
+    });
+    toast.present();
+
+    console.log(informes);
   }
 
 }

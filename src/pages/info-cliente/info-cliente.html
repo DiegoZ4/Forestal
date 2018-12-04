@@ -136,13 +136,34 @@
         </ion-item>
 
         <ion-item>
-          <button ion-button full primary (click)="saveLocal()">Guardar Informe</button>
+          <button ion-button full primary (click)="saveLocal()">Guardar Encabezado</button>
         </ion-item>
 
       </form>
     </ion-list>
 
     <ion-list *ngSwitchCase="'kittens'">
+      <ion-card>
+        <ion-card-header>
+          Informes cargados
+        </ion-card-header>
+
+        <ion-list>
+
+          <ion-item-sliding>
+            <ion-item *ngFor="let informe of informes">
+              <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>
+              <p>Especie: {{ informe.especie}}</p>
+            </ion-item>
+          </ion-item-sliding>
+
+        </ion-list>
+
+        <ion-card-header>
+          Genera nuevo Informe
+        </ion-card-header>
+      </ion-card>
+
       <form [formGroup]="formaLinea">
 
         <pre>{{ formaLinea.value | json }}</pre>
@@ -157,14 +178,24 @@
           <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>
         </ion-item>
 
+        <ion-item>
+          <ion-label floating>Rollo</ion-label>
+          <ion-input type="text" formControlName="rollo" placeholder=""></ion-input>
+        </ion-item>
 
+        <ion-item>
+          <ion-label>Especie</ion-label>
+          <ion-select formControlName="especie">
+            <ion-option *ngFor="let especie of especies"
+                        [value]="especie.id">{{ especie.nombre }}</ion-option>
+          </ion-select>
+        </ion-item>
 
         <ion-item>
           <p>{{ myPhoto2 }}</p>
           <img src="{{ myPhoto2 }}" alt="">
         </ion-item>
 
-        <pre>{{ formaLinea.value | json }}</pre>
         <ion-item>
           <ion-label floating>Coordenadas GPS</ion-label>
           <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
@@ -206,7 +237,7 @@
         </ion-item>
 
         <ion-item>
-          <button ion-button full primary (click)="saveLocal()">Guardar Informe</button>
+          <button ion-button full primary (click)="saveLocalInforme()">Guardar Informe</button>
         </ion-item>
 
       </form>

@@ -28,15 +28,37 @@ var AboutPage = /** @class */ (function () {
         this.navCtrl = navCtrl;
         this._login = _login;
         this.data = {};
-        this.informes = [];
+        this.requerimientos = [];
+        this.sincronizado = false;
+        this.requerimientos = JSON.parse(localStorage.getItem('requerimientos'));
+        console.log(this.requerimientos);
+        // console.log(this.requerimientos.length)
+        if (this.requerimientos) {
+            this.sincronizado = true;
+        }
     }
     AboutPage.prototype.sincronizar = function () {
         var _this = this;
-        this._login.getInformes()
+        this._login.getRequerimientos()
             .subscribe(function (resp) {
             // console.log(resp)
-            _this.informes = resp;
-            localStorage.setItem('informes', JSON.stringify(_this.informes));
+            _this.requerimientos = resp;
+            localStorage.setItem('requerimientos', JSON.stringify(_this.requerimientos));
+            if (_this.requerimientos) {
+                _this.sincronizado = true;
+            }
+        });
+    };
+    AboutPage.prototype.sincronizarUp = function () {
+        this._login.saveInforme(JSON.stringify(this.requerimientos))
+            .subscribe(function (resp) {
+            console.log(resp.status);
+            if (resp.status == 'ok') {
+                console.log('datos subidos');
+            }
+            else {
+                console.log('error en subida de datos');
+            }
         });
     };
     AboutPage.prototype.goToMyPage = function (id) {
@@ -47,7 +69,7 @@ var AboutPage = /** @class */ (function () {
     };
     AboutPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-about',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Informes\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-card>\n\n    <ion-card-content color="primary">\n      No se encuentran informes. Sincronice la aplicación para comenzar a trabajar\n    </ion-card-content>\n\n  </ion-card>\n\n  <div padding>\n    <button ion-button icon-start block (click)="sincronizar()">\n      <ion-icon name="ios-cloud-download"></ion-icon>\n      Sincronizar\n    </button>\n  </div>\n\n  <ion-list>\n    <ion-item *ngFor="let informe of informes">\n     <h2>{{informe.lote}}</h2>\n     <p>{{informe.nomenclatura_catastral}}</p>\n     <button ion-button clear item-end (click)="goToMyPage(informe.id)">Ver informe</button>\n   </ion-item>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/
+            selector: 'page-about',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Informes\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-card>\n\n    <ion-card-content color="primary">\n      No se encuentran informes. Sincronice la aplicación para comenzar a trabajar\n    </ion-card-content>\n\n  </ion-card>\n\n  <div padding *ngIf="!sincronizado">\n    <button ion-button icon-start block (click)="sincronizar()">\n      <ion-icon name="ios-cloud-download"></ion-icon>\n      Descargar información\n    </button>\n  </div>\n\n  <div padding *ngIf="sincronizado">\n    <button ion-button color="secondary" icon-start block (click)="sincronizarUp()">\n      <ion-icon name="ios-cloud-upload"></ion-icon>\n      Subir información\n    </button>\n  </div>\n\n  <ion-list>\n    <ion-item *ngFor="let requerimiento of requerimientos">\n     <h2>{{requerimiento.lote}}</h2>\n     <p>{{requerimiento.nomenclatura_catastral}}</p>\n     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver requerimiento</button>\n   </ion-item>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_2__providers_services_login_services_login__["a" /* ServicesLoginProvider */]])
@@ -478,7 +500,10 @@ var ServicesLoginProvider = /** @class */ (function () {
         this.apiLogin = 'http://appsausol.com.ar.elserver.com/forestal/login.php';
         this.apiUrlPass = 'http://appsausol.com.ar.elserver.com/saveNewPass.php';
         this.apiUrlInformes = 'http://appsausol.com.ar.elserver.com/forestal/informes.php';
+        this.apiSaveInformes = 'http://appsausol.com.ar.elserver.com/forestal/saveInformes.php';
         this.apiUrlEspecies = 'http://appsausol.com.ar.elserver.com/forestal/especies.php';
+        this.apiUrlRequerimientos = 'http://appsausol.com.ar.elserver.com/forestal/requerimientos.php';
+        this.apiUrlRequerimiento = 'http://appsausol.com.ar.elserver.com/forestal/requerimiento.php';
         this.apiUrlNotas = 'http://appsausol.com.ar.elserver.com/getCuentas.php';
         this.apiUrlCliente = 'http://appsausol.com.ar.elserver.com/getCliente.php';
         this.apiUrlProveedor = 'http://appsausol.com.ar.elserver.com/getProveedor.php';
@@ -503,9 +528,9 @@ var ServicesLoginProvider = /** @class */ (function () {
             console.log(err);
         });
     };
-    ServicesLoginProvider.prototype.getInformes = function () {
+    ServicesLoginProvider.prototype.getRequerimientos = function () {
         console.log();
-        return this.http.get(this.apiUrlInformes)
+        return this.http.get(this.apiUrlRequerimientos)
             .map(function (res) {
             return res;
         }, function (err) {
@@ -515,6 +540,14 @@ var ServicesLoginProvider = /** @class */ (function () {
     ServicesLoginProvider.prototype.getEspecies = function () {
         console.log();
         return this.http.get(this.apiUrlEspecies)
+            .map(function (res) {
+            return res;
+        }, function (err) {
+            console.log(err);
+        });
+    };
+    ServicesLoginProvider.prototype.getRequerimiento = function (id) {
+        return this.http.get(this.apiUrlRequerimiento + '?id=' + id)
             .map(function (res) {
             return res;
         }, function (err) {
@@ -579,6 +612,18 @@ var ServicesLoginProvider = /** @class */ (function () {
     };
     ServicesLoginProvider.prototype.getPagos = function () {
         //borraaaar
+    };
+    ServicesLoginProvider.prototype.saveInforme = function (body) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        });
+        return this.http.post(this.apiSaveInformes, body, { headers: headers })
+            .map(function (res) {
+            return res;
+        }, function (err) {
+            console.log(err);
+        });
     };
     ServicesLoginProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
