@@ -15,6 +15,7 @@ export class ServicesLoginProvider {
   apiUrlPass = 'http://appsausol.com.ar.elserver.com/saveNewPass.php';
   apiUrlInformes = 'http://appsausol.com.ar.elserver.com/forestal/informes.php';
   apiSaveInformes = 'http://appsausol.com.ar.elserver.com/forestal/saveInformes.php';
+  apiSaveEncabezados = 'http://appsausol.com.ar.elserver.com/forestal/saveEncabezados.php';
   apiUrlEspecies = 'http://appsausol.com.ar.elserver.com/forestal/especies.php';
   apiUrlRequerimientos = 'http://appsausol.com.ar.elserver.com/forestal/requerimientos.php';
   apiUrlRequerimiento = 'http://appsausol.com.ar.elserver.com/forestal/requerimiento.php';
@@ -26,6 +27,11 @@ export class ServicesLoginProvider {
   apiUrlProveedoresComprados = 'http://appsausol.com.ar.elserver.com/getProveedoresComprados.php';
   apiUrlProveedoresFaltantes = 'http://appsausol.com.ar.elserver.com/getProveedoresFaltantes.php';
   apiUrlVta = 'http://appsausol.com.ar.elserver.com/getVta7.php';
+
+  myPhoto:any;
+  myPhoto2:any;
+  myPhotoName:string;
+  myPhoto2Name:string;
 
   constructor(public http: HttpClient) {
     console.log('Hello ServicesLoginProvider Provider');
@@ -150,13 +156,27 @@ export class ServicesLoginProvider {
     //borraaaar
   }
 
+  saveEncabezado(body){
+    let headers = new HttpHeaders({
+       'Access-Control-Allow-Origin': '*',
+       'Content-Type': 'application/json'
+    });
+
+    return this.http.post(this.apiSaveEncabezados, body, {headers})
+      .map(res => {
+          return res;
+        }, (err) => {
+          console.log(err);
+        });
+  }
+
   saveInforme(body){
     let headers = new HttpHeaders({
        'Access-Control-Allow-Origin': '*',
        'Content-Type': 'application/json'
     });
 
-    return this.http.post(this.apiSaveInformes,body, {headers})
+    return this.http.post(this.apiSaveInformes, body, {headers})
       .map(res => {
           return res;
         }, (err) => {

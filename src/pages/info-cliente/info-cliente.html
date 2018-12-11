@@ -3,6 +3,13 @@
     <ion-title>
       Información del Requerimiento
     </ion-title>
+    <ion-buttons end>
+      <button (click)="goToHome()"
+              ion-button icon-only color="royal">
+        <ion-icon name="home"></ion-icon>
+      </button>
+    </ion-buttons>
+
   </ion-navbar>
 <!--
   <ion-toolbar no-border-top>
@@ -111,32 +118,33 @@
 
         <ion-item>
           <ion-label floating>Remito</ion-label>
-          <ion-input type="text" formControlName="remito" placeholder=""></ion-input>
+          <ion-input type="number" formControlName="remito" placeholder=""></ion-input>
         </ion-item>
 
         <ion-item>
-          <p>{{ myPhoto }}</p>
-          <img src="{{ myPhoto }}" alt="">
+          <p>{{ _login.myPhoto }}</p>
+          <img src="{{ _login.myPhoto }}" alt="">
         </ion-item>
 
-        <pre>{{ formaInforme.value | json }}</pre>
+        <!-- <pre>{{ formaInforme.value | json }}</pre> -->
         <ion-item>
           <ion-label floating>Coordenadas GPS del Camión</ion-label>
           <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
         </ion-item>
 
         <ion-item>
-          <button style="margin-bottom:20px" (click)="takeGPSCamion()"
-                  color="primary" ion-button block>Tomar Coordenadas GPS del Camión</button>
+          <button style="margin-bottom:20px; height:35px" (click)="takeGPSCamion()"
+                  color="light" ion-button full>Tomar Coordenadas GPS del Camión</button>
         </ion-item>
 
         <ion-item>
-          <button style="margin-bottom:20px" (click)="takePhotoCamion()"
-                  color="primary" ion-button block>Sacar foto del Camión</button>
+          <button style="margin-bottom:20px; height:35px" (click)="takePhotoCamion()"
+                  color="light" ion-button full>Sacar foto del Camión</button>
         </ion-item>
 
         <ion-item>
-          <button ion-button full primary (click)="saveLocal()">Guardar Encabezado</button>
+          <button style="margin-bottom:20px; height:35px"
+                  ion-button full (click)="saveLocal()">Guardar Encabezado</button>
         </ion-item>
 
       </form>
@@ -145,102 +153,22 @@
     <ion-list *ngSwitchCase="'kittens'">
       <ion-card>
         <ion-card-header>
-          Informes cargados
+         <button ion-button full (click)="goToMyPage('nuevo','')">Generar nuevo informe</button>
         </ion-card-header>
 
         <ion-list>
 
-          <ion-item-sliding>
-            <ion-item *ngFor="let informe of informes">
-              <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>
-              <p>Especie: {{ informe.especie}}</p>
-            </ion-item>
-          </ion-item-sliding>
+          <ion-item *ngFor="let informe of informes; let i = index">
+            <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>
+            <p>Especie: {{ informe.especie}}</p>
+            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver informe</button>
+          </ion-item>
 
         </ion-list>
 
-        <ion-card-header>
-          Genera nuevo Informe
-        </ion-card-header>
       </ion-card>
 
-      <form [formGroup]="formaLinea">
-
-        <pre>{{ formaLinea.value | json }}</pre>
-
-        <ion-item>
-          <ion-label floating>Rodal</ion-label>
-          <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Tendida</ion-label>
-          <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Rollo</ion-label>
-          <ion-input type="text" formControlName="rollo" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Especie</ion-label>
-          <ion-select formControlName="especie">
-            <ion-option *ngFor="let especie of especies"
-                        [value]="especie.id">{{ especie.nombre }}</ion-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item>
-          <p>{{ myPhoto2 }}</p>
-          <img src="{{ myPhoto2 }}" alt="">
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Coordenadas GPS</ion-label>
-          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <button style="margin-bottom:20px" (click)="takeGPS()"
-                  color="primary" ion-button block>Tomar Coordenadas GPS</button>
-        </ion-item>
-
-        <ion-item>
-          <button style="margin-bottom:20px" (click)="takePhoto()"
-                  color="primary" ion-button block>Sacar foto</button>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Diametro 1</ion-label>
-          <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Diametro 2</ion-label>
-          <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Largo</ion-label>
-          <ion-input type="text" formControlName="largo" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Volumen</ion-label>
-          <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Código Rollo</ion-label>
-          <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <button ion-button full primary (click)="saveLocalInforme()">Guardar Informe</button>
-        </ion-item>
-
-      </form>
+      <!--  -->
     </ion-list>
 
 

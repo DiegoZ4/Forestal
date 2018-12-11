@@ -1,4 +1,4 @@
-#Tue Dec 04 08:35:25 ART 2018
+#Tue Dec 11 13:38:36 ART 2018
 base.0=/home/diego/Documentos/Forestal/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
 renamed.0=classes.dex
 file.0=/home/diego/Documentos/Forestal/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0/classes.dex

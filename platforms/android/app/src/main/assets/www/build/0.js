@@ -46,11 +46,13 @@ var InfoClientePageModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_services_login_services_login__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__contact_contact__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__about_about__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_file__ = __webpack_require__(156);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -68,6 +70,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the InfoClientePage page.
  *
@@ -75,16 +79,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var InfoClientePage = /** @class */ (function () {
-    function InfoClientePage(navCtrl, navParams, _login, geolocation, camera, transfer, file, loadingCtrl) {
+    function InfoClientePage(navCtrl, navParams, _login, geolocation, geolocation2, camera, transfer, file, loadingCtrl, toastCtrl) {
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this._login = _login;
         this.geolocation = geolocation;
+        this.geolocation2 = geolocation2;
         this.camera = camera;
         this.transfer = transfer;
         this.file = file;
         this.loadingCtrl = loadingCtrl;
+        this.toastCtrl = toastCtrl;
         this.id = 0;
         this.idVendedor = 0;
         this.ventas = [];
@@ -95,25 +101,36 @@ var InfoClientePage = /** @class */ (function () {
         this.requerimientos = [];
         this.pet = "puppies";
         this.fechaActual = new Date();
-        this.fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.fechaActual.getDate();
+        this.day = this.fechaActual.getDate() < 10 ? "0" + this.fechaActual.getDate() : this.fechaActual.getDate();
+        this.fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.day;
         console.log(this.fechaActualParse);
         this.requerimientos = JSON.parse(localStorage.getItem('requerimientos'));
+        this.informes = JSON.parse(localStorage.getItem('informes'));
         console.log(this.navParams.get('id'));
         this.id = this.navParams.get('id');
-        // let dataStorage =  JSON.parse(localStorage.getItem('userData'))
-        // this.idVendedor = dataStorage.id;
-        //
         this.formaInforme = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
             nro_requerimiento: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.id, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             fecha: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.fechaActualParse, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             gps: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             foto: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
+            archivo: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             remito: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required)
         });
+        if (this.encabezados = JSON.parse(localStorage.getItem('encabezados'))) {
+            console.log(this.encabezados);
+            this.encabezado = this.encabezados.find(function (x) { return x.nro_requerimiento === _this.id; });
+            this.formaInforme.controls['fecha'].setValue(this.encabezado.fecha);
+            this.formaInforme.controls['gps'].setValue(this.encabezado.gps);
+            this.formaInforme.controls['remito'].setValue(this.encabezado.remito);
+        }
+        else {
+            this.formaInforme.controls['fecha'].setValue(this.fechaActualParse);
+        }
         this.formaLinea = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
             nro_requerimiento: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.id, __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             gps: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             foto: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
+            archivo: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             rodal: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             tendida: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
             rollo: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required),
@@ -142,44 +159,19 @@ var InfoClientePage = /** @class */ (function () {
     }
     InfoClientePage.prototype.takeGPSCamion = function () {
         var _this = this;
-        var watch = this.geolocation.watchPosition();
-        watch.subscribe(function (data) {
-            console.log(data);
-            _this.formaInforme.controls['gps'].setValue(data.coords.latitude + ' ' + data.coords.longitude);
-        });
-        // Clear watch
-        // navigator.geolocation.clearWatch(watch);
-    };
-    InfoClientePage.prototype.takeGPS = function () {
-        var _this = this;
-        var watch = this.geolocation.watchPosition();
-        watch.subscribe(function (data) {
-            console.log(data);
-            _this.formaInforme.controls['gps'].setValue(data.coords.latitude + ' ' + data.coords.longitude);
+        this.geolocation.getCurrentPosition().then(function (resp) {
+            // resp.coords.latitude
+            // resp.coords.longitude
+            console.log(resp.coords);
+            _this.formaInforme.controls['gps'].setValue(resp.coords.latitude + ' ' + resp.coords.longitude);
+        }).catch(function (error) {
+            console.log('Error getting location', error);
         });
         // Clear watch
         // navigator.geolocation.clearWatch(watch);
     };
     InfoClientePage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad InfoClientePage');
-    };
-    InfoClientePage.prototype.takePhoto = function () {
-        var _this = this;
-        var options = {
-            quality: 100,
-            destinationType: this.camera.DestinationType.FILE_URI,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE
-        };
-        this.camera.getPicture(options).then(function (imageData) {
-            // imageData is either a base64 encoded string or a file URI
-            // If it's base64 (DATA_URL):
-            // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-            alert(imageData);
-            _this.myPhoto2 = imageData;
-        }, function (err) {
-            // Handle error
-        });
     };
     InfoClientePage.prototype.takePhotoCamion = function () {
         var _this = this;
@@ -193,8 +185,12 @@ var InfoClientePage = /** @class */ (function () {
             // imageData is either a base64 encoded string or a file URI
             // If it's base64 (DATA_URL):
             // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-            alert(imageData);
-            _this.myPhoto = imageData;
+            // alert(imageData)
+            _this._login.myPhoto = imageData;
+            var imageName = imageData.split("/");
+            _this.formaInforme.controls['foto'].setValue(imageName.pop());
+            _this.formaInforme.controls['archivo'].setValue(imageData);
+            _this._login.myPhotoName = imageName.pop();
         }, function (err) {
             // Handle error
         });
@@ -212,14 +208,14 @@ var InfoClientePage = /** @class */ (function () {
         //option transfer
         var options = {
             fileKey: 'photo',
-            fileName: "myImage_" + random + ".jpg",
+            fileName: this._login.myPhotoName,
             chunkedMode: false,
             httpMethod: 'post',
             mimeType: "image/jpeg",
             headers: {}
         };
         //file transfer action
-        fileTransfer.upload(this.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
+        fileTransfer.upload(this._login.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
             .then(function (data) {
             alert(data);
             alert("Success");
@@ -253,42 +249,41 @@ var InfoClientePage = /** @class */ (function () {
         console.log(this.formaInforme.value);
         console.log(encabezados);
         localStorage.setItem('encabezados', JSON.stringify(encabezados));
+        var toast = this.toastCtrl.create({
+            message: 'Encabezado agregado correctamente',
+            duration: 3000
+        });
+        toast.present();
+        this.formaLinea.reset();
+        // this.goToInfo();
         console.log(encabezados);
     };
-    InfoClientePage.prototype.saveLocalInforme = function () {
-        var _this = this;
-        var informes = [];
-        informes = JSON.parse(localStorage.getItem('informes')) || [];
-        if (informes.find(function (inf) { return inf.nro_requerimiento === _this.id; })) {
-            console.log("ya hay un informe");
-            informes.forEach(function (element, index) {
-                if (element.nro_requerimiento === _this.id) {
-                    informes[index] = _this.formaLinea.value;
-                }
-            });
-        }
-        else {
-            console.log('no hay informes');
-            informes.push(this.formaLinea.value);
-        }
-        console.log(JSON.parse(localStorage.getItem('informes')));
-        console.log(this.formaLinea.value);
-        console.log(informes);
-        localStorage.setItem('informes', JSON.stringify(informes));
-        console.log(informes);
+    InfoClientePage.prototype.goToMyPage = function (id, informe) {
+        // go to the MyPage component
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_7__contact_contact__["a" /* ContactPage */], {
+            'id': id,
+            'nro_requerimiento': this.id,
+            'informe': informe
+        });
+    };
+    InfoClientePage.prototype.goToHome = function () {
+        // go to the MyPage component
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__about_about__["a" /* AboutPage */], {});
     };
     InfoClientePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-info-cliente',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Información del Requerimiento\n    </ion-title>\n  </ion-navbar>\n<!--\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="pagos">\n        Cuentas Corrientes\n      </ion-segment-button>\n      <ion-segment-button value="notas">\n        Prov/Compr\n      </ion-segment-button>\n      <ion-segment-button value="descargar">\n        Prov/NC\n      </ion-segment-button>\n      <ion-segment-button value="faltantes">\n        Prov/Falt\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar> -->\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Instrumento Legal</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.instrumento_legal}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Nomenclatura Catastral</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.nomenclatura_catastral}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Titular</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_titular}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Lote Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.lote_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Obrajero</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_obrajero}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Guia Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.guia_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen A</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_A}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen B</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_B}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen C</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_C}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="puppies">\n        Encabezado\n      </ion-segment-button>\n      <ion-segment-button value="kittens">\n        Informes\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar>\n\n  <div [ngSwitch]="pet">\n    <ion-list *ngSwitchCase="\'puppies\'">\n      <form [formGroup]="formaInforme">\n\n        <ion-item>\n          <ion-label floating>Fecha</ion-label>\n          <ion-input type="date" formControlName="fecha" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Remito</ion-label>\n          <ion-input type="text" formControlName="remito" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <p>{{ myPhoto }}</p>\n          <img src="{{ myPhoto }}" alt="">\n        </ion-item>\n\n        <pre>{{ formaInforme.value | json }}</pre>\n        <ion-item>\n          <ion-label floating>Coordenadas GPS del Camión</ion-label>\n          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px" (click)="takeGPSCamion()"\n                  color="primary" ion-button block>Tomar Coordenadas GPS del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px" (click)="takePhotoCamion()"\n                  color="primary" ion-button block>Sacar foto del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button ion-button full primary (click)="saveLocal()">Guardar Encabezado</button>\n        </ion-item>\n\n      </form>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'kittens\'">\n      <form [formGroup]="formaLinea">\n\n        <pre>{{ formaLinea.value | json }}</pre>\n\n        <ion-item>\n          <ion-label floating>Rodal</ion-label>\n          <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Tendida</ion-label>\n          <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <p>{{ myPhoto2 }}</p>\n          <img src="{{ myPhoto2 }}" alt="">\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Coordenadas GPS</ion-label>\n          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px" (click)="takeGPS()"\n                  color="primary" ion-button block>Tomar Coordenadas GPS</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px" (click)="takePhoto()"\n                  color="primary" ion-button block>Sacar foto</button>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Diametro 1</ion-label>\n          <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Diametro 2</ion-label>\n          <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Largo</ion-label>\n          <ion-input type="text" formControlName="largo" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Volumen</ion-label>\n          <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Código Rollo</ion-label>\n          <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button ion-button full primary (click)="saveLocalInforme()">Guardar Informe</button>\n        </ion-item>\n\n      </form>\n    </ion-list>\n\n\n  </div>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/,
+            selector: 'page-info-cliente',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Información del Requerimiento\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="goToHome()"\n              ion-button icon-only color="royal">\n        <ion-icon name="home"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n<!--\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="pagos">\n        Cuentas Corrientes\n      </ion-segment-button>\n      <ion-segment-button value="notas">\n        Prov/Compr\n      </ion-segment-button>\n      <ion-segment-button value="descargar">\n        Prov/NC\n      </ion-segment-button>\n      <ion-segment-button value="faltantes">\n        Prov/Falt\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar> -->\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Instrumento Legal</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.instrumento_legal}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Nomenclatura Catastral</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.nomenclatura_catastral}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Titular</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_titular}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Lote Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.lote_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Obrajero</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_obrajero}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Guia Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.guia_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen A</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_A}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen B</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_B}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen C</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_C}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="puppies">\n        Encabezado\n      </ion-segment-button>\n      <ion-segment-button value="kittens">\n        Informes\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar>\n\n  <div [ngSwitch]="pet">\n    <ion-list *ngSwitchCase="\'puppies\'">\n      <form [formGroup]="formaInforme">\n\n        <ion-item>\n          <ion-label floating>Fecha</ion-label>\n          <ion-input type="date" formControlName="fecha" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Remito</ion-label>\n          <ion-input type="number" formControlName="remito" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <p>{{ _login.myPhoto }}</p>\n          <img src="{{ _login.myPhoto }}" alt="">\n        </ion-item>\n\n        <!-- <pre>{{ formaInforme.value | json }}</pre> -->\n        <ion-item>\n          <ion-label floating>Coordenadas GPS del Camión</ion-label>\n          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takeGPSCamion()"\n                  color="light" ion-button full>Tomar Coordenadas GPS del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takePhotoCamion()"\n                  color="light" ion-button full>Sacar foto del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px"\n                  ion-button full (click)="saveLocal()">Guardar Encabezado</button>\n        </ion-item>\n\n      </form>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'kittens\'">\n      <ion-card>\n        <ion-card-header>\n         <button ion-button full (click)="goToMyPage(\'nuevo\',\'\')">Generar nuevo informe</button>\n        </ion-card-header>\n\n        <ion-list>\n\n          <ion-item *ngFor="let informe of informes; let i = index">\n            <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>\n            <p>Especie: {{ informe.especie}}</p>\n            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver informe</button>\n          </ion-item>\n\n        </ion-list>\n\n      </ion-card>\n\n      <!--  -->\n    </ion-list>\n\n\n  </div>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_2__providers_services_login_services_login__["a" /* ServicesLoginProvider */],
             __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */],
+            __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */],
             __WEBPACK_IMPORTED_MODULE_5__ionic_native_camera__["a" /* Camera */],
             __WEBPACK_IMPORTED_MODULE_6__ionic_native_file_transfer__["a" /* FileTransfer */],
-            __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__["a" /* File */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */]])
+            __WEBPACK_IMPORTED_MODULE_9__ionic_native_file__["a" /* File */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ToastController */]])
     ], InfoClientePage);
     return InfoClientePage;
 }());

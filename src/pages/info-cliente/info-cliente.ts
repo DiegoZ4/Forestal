@@ -8,6 +8,8 @@ import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geol
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 
+import { ContactPage } from '../contact/contact';
+import { AboutPage } from '../about/about';
 
 import { File } from '@ionic-native/file';
 
@@ -26,7 +28,6 @@ import { File } from '@ionic-native/file';
 export class InfoClientePage {
   encabezado: any;
   encabezados: any;
-  especies: any;
   informes: any;
   requerimiento: any;
 
@@ -45,8 +46,6 @@ export class InfoClientePage {
   formaInforme:FormGroup;
   formaLinea:FormGroup;
 
-  myPhoto:any;
-  myPhoto2:any;
 
   requerimientos=[];
 
@@ -57,7 +56,8 @@ export class InfoClientePage {
   currentPos : Geoposition;
 
   fechaActual = new Date();
-  fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.fechaActual.getDate();
+  day = this.fechaActual.getDate() < 10 ? "0"+this.fechaActual.getDate() : this.fechaActual.getDate();
+  fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.day;
 
   constructor(
     public navCtrl: NavController,
@@ -80,36 +80,30 @@ export class InfoClientePage {
     console.log( this.navParams.get('id'));
     this.id = this.navParams.get('id');
 
-    this._login.getEspecies()
-        .subscribe( (resp:any)=>{
-          this.especies = resp;
-          console.log(this.especies)
-        })
-
-    // let dataStorage =  JSON.parse(localStorage.getItem('userData'))
-    // this.idVendedor = dataStorage.id;
-    //
-
     this.formaInforme = new FormGroup({
       nro_requerimiento: new FormControl(this.id, Validators.required),
       fecha: new FormControl(this.fechaActualParse, Validators.required),
       gps: new FormControl('', Validators.required),
       foto: new FormControl('', Validators.required),
+      archivo: new FormControl('', Validators.required),
       remito: new FormControl('', Validators.required)
     })
 
     if(this.encabezados = JSON.parse(localStorage.getItem('encabezados'))){
-      console.log(this.encabezados)
+        console.log(this.encabezados)
         this.encabezado =  this.encabezados.find( x => x.nro_requerimiento === this.id );
         this.formaInforme.controls['fecha'].setValue(this.encabezado.fecha);
         this.formaInforme.controls['gps'].setValue(this.encabezado.gps);
         this.formaInforme.controls['remito'].setValue(this.encabezado.remito);
+    }else{
+      this.formaInforme.controls['fecha'].setValue(this.fechaActualParse);
     }
 
     this.formaLinea = new FormGroup({
       nro_requerimiento: new FormControl(this.id, Validators.required),
       gps: new FormControl('', Validators.required),
       foto: new FormControl('', Validators.required),
+      archivo: new FormControl('', Validators.required),
       rodal: new FormControl('', Validators.required),
       tendida: new FormControl('', Validators.required),
       rollo: new FormControl('', Validators.required),
@@ -154,44 +148,12 @@ export class InfoClientePage {
     // navigator.geolocation.clearWatch(watch);
   }
 
-  takeGPS(){
-
-    this.geolocation2.getCurrentPosition().then((resp) => {
-     // resp.coords.latitude
-     // resp.coords.longitude
-     console.log(resp.coords);
-     this.formaLinea.controls['gps'].setValue(resp.coords.latitude+' '+resp.coords.longitude);
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-
-    // Clear watch
-    // navigator.geolocation.clearWatch(watch);
-  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InfoClientePage');
   }
 
-  takePhoto(){
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
 
-    this.camera.getPicture(options).then((imageData) => {
-     // imageData is either a base64 encoded string or a file URI
-     // If it's base64 (DATA_URL):
-     // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-     alert(imageData)
-     this.myPhoto2 = imageData;
-    }, (err) => {
-     // Handle error
-    });
-  }
 
   takePhotoCamion(){
     const options: CameraOptions = {
@@ -205,12 +167,21 @@ export class InfoClientePage {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
      // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-     alert(imageData)
-     this.myPhoto = imageData;
+     // alert(imageData)
+     this._login.myPhoto = imageData;
+
+     let imageName = imageData.split("/");
+     this.formaInforme.controls['foto'].setValue(imageName.pop());
+     this.formaInforme.controls['archivo'].setValue(imageData);
+
+     this._login.myPhotoName = imageName.pop();
+
     }, (err) => {
      // Handle error
     });
   }
+
+
 
   uploadPhoto(){
     //Show loading
@@ -228,7 +199,7 @@ export class InfoClientePage {
    //option transfer
    let options: FileUploadOptions = {
      fileKey: 'photo',
-     fileName: "myImage_" + random + ".jpg",
+     fileName: this._login.myPhotoName,
      chunkedMode: false,
      httpMethod: 'post',
      mimeType: "image/jpeg",
@@ -236,7 +207,7 @@ export class InfoClientePage {
    }
 
    //file transfer action
-   fileTransfer.upload(this.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
+   fileTransfer.upload(this._login.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
      .then((data) => {
        alert(data);
        alert("Success");
@@ -272,49 +243,34 @@ export class InfoClientePage {
     console.log(this.formaInforme.value)
     console.log(encabezados)
 
-    if(localStorage.setItem('encabezados', JSON.stringify(encabezados))){
-      const toast = this.toastCtrl.create({
-        message: 'User was added successfully',
-        duration: 3000
-      });
-      toast.present();
-    }
-
-    console.log(encabezados);
-  }
-
-  saveLocalInforme(){
-    let informes = [];
-    informes = JSON.parse(localStorage.getItem('informes')) || [];
-
-    // if(informes.find( inf => inf.nro_requerimiento === this.id )){
-    //   console.log("ya hay un informe");
-    //
-    //   informes.forEach((element, index) => {
-    //       if(element.nro_requerimiento === this.id) {
-    //           informes.push(this.formaLinea.value);
-    //       }
-    //   });
-    // }else{
-    //   console.log('no hay informes')
-    //   informes.push(this.formaLinea.value);
-    // }
-
-    informes.push(this.formaLinea.value);
-
-    console.log(JSON.parse(localStorage.getItem('informes')));
-    console.log(this.formaLinea.value)
-    console.log(informes)
-
-    localStorage.setItem('informes', JSON.stringify(informes));
+    localStorage.setItem('encabezados', JSON.stringify(encabezados));
 
     const toast = this.toastCtrl.create({
-        message: 'User was added successfully',
+        message: 'Encabezado agregado correctamente',
         duration: 3000
     });
     toast.present();
 
-    console.log(informes);
+    this.formaLinea.reset()
+    // this.goToInfo();
+
+    console.log(encabezados);
+  }
+
+
+
+  goToMyPage(id,informe) {
+    // go to the MyPage component
+    this.navCtrl.push(ContactPage, {
+      'id': id,
+      'nro_requerimiento': this.id,
+      'informe': informe
+    });
+  }
+
+  goToHome() {
+    // go to the MyPage component
+    this.navCtrl.push(AboutPage, {});
   }
 
 }

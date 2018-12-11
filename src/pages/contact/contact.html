@@ -1,31 +1,99 @@
 <ion-header>
 
-  <ion-navbar hideBackButton color=primary>
+  <ion-navbar color=primary>
     <ion-title>
       {{nombre}}
     </ion-title>
+    <ion-buttons end>
+      <button (click)="goToHome()"
+              ion-button icon-only color="royal">
+        <ion-icon name="home"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      Lista de Clientes
-    </ion-card-header>
-  </ion-card>
-
-  <ion-card color=primary *ngIf="vta">
-    <ion-card-content>
-      VENTA TOTAL ACTUAL: {{ vta }}
-    </ion-card-content>
-  </ion-card>
-
   <ion-list>
-    <button ion-item *ngFor="let item of datosPagos" (click)="goToMyPage(item.id)">
-      <ion-icon name="ios-briefcase-outline" item-start></ion-icon>
-      {{item.razon}}
-    </button>
+    <form [formGroup]="formaLinea">
+
+      <!-- <pre>{{ formaLinea.value | json }}</pre> -->
+
+      <ion-item>
+        <ion-label floating>Rodal</ion-label>
+        <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Tendida</ion-label>
+        <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Rollo</ion-label>
+        <ion-input type="text" formControlName="rollo" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Especie</ion-label>
+        <ion-select formControlName="especie">
+          <ion-option *ngFor="let especie of especies"
+                      [value]="especie.id">{{ especie.nombre }}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <p>{{ _login.myPhoto2 }}</p>
+        <img src="{{ _login.myPhoto2 }}" alt="">
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Coordenadas GPS</ion-label>
+        <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <button style="margin-bottom:20px; height:35px" (click)="takeGPS()"
+                color="light" ion-button block>Tomar Coordenadas GPS</button>
+      </ion-item>
+
+      <ion-item>
+        <button style="margin-bottom:20px; height:35px" (click)="takePhoto()"
+                color="light" ion-button block>Sacar foto</button>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Diametro 1</ion-label>
+        <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Diametro 2</ion-label>
+        <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Largo</ion-label>
+        <ion-input type="text" formControlName="largo" placeholder=""></ion-input>
+      </ion-item>
+
+      <!-- <ion-item>
+        <ion-label floating>Volumen</ion-label>
+        <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-label floating>Código Rollo</ion-label>
+        <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <button style="margin-bottom:20px; height:35px"
+                ion-button full (click)="saveLocalInforme()">Guardar Informe</button>
+      </ion-item>
+
+    </form>
 
   </ion-list>
 </ion-content>
