@@ -33,6 +33,9 @@
     },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "dz.forestal.softpower"
+    },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "dz.forestal.softpower"
     }
   },
   "dependent_plugins": {}

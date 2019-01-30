@@ -17,6 +17,7 @@ export class ServicesLoginProvider {
   apiSaveInformes = 'http://appsausol.com.ar.elserver.com/forestal/saveInformes.php';
   apiSaveEncabezados = 'http://appsausol.com.ar.elserver.com/forestal/saveEncabezados.php';
   apiUrlEspecies = 'http://appsausol.com.ar.elserver.com/forestal/especies.php';
+  apiUrlEspecie = 'http://appsausol.com.ar.elserver.com/forestal/especie.php';
   apiUrlRequerimientos = 'http://appsausol.com.ar.elserver.com/forestal/requerimientos.php';
   apiUrlRequerimiento = 'http://appsausol.com.ar.elserver.com/forestal/requerimiento.php';
 
@@ -32,6 +33,8 @@ export class ServicesLoginProvider {
   myPhoto2:any;
   myPhotoName:string;
   myPhoto2Name:string;
+
+  cuit:number;
 
   constructor(public http: HttpClient) {
     console.log('Hello ServicesLoginProvider Provider');
@@ -58,10 +61,10 @@ export class ServicesLoginProvider {
 
 
 
-  getRequerimientos(){
+  getRequerimientos(cuit){
     console.log()
 
-    return this.http.get(this.apiUrlRequerimientos)
+    return this.http.get(this.apiUrlRequerimiento+'?cuit='+cuit)
       .map(res => {
           return res;
         }, (err) => {
@@ -73,6 +76,17 @@ export class ServicesLoginProvider {
     console.log()
 
     return this.http.get(this.apiUrlEspecies)
+      .map(res => {
+          return res;
+        }, (err) => {
+          console.log(err);
+        });
+  }
+
+  getEspecie(id){
+    console.log()
+
+    return this.http.get(this.apiUrlEspecie+'?id='+id)
       .map(res => {
           return res;
         }, (err) => {

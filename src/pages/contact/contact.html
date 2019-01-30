@@ -2,7 +2,7 @@
 
   <ion-navbar color=primary>
     <ion-title>
-      {{nombre}}
+      Código R - Sistema de Trazabilidad
     </ion-title>
     <ion-buttons end>
       <button (click)="goToHome()"
@@ -22,17 +22,24 @@
 
       <ion-item>
         <ion-label floating>Rodal</ion-label>
-        <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>
+        <ion-input (keyup)="setMR()"
+                   type="text" formControlName="rodal" placeholder=""></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Tendida</ion-label>
-        <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>
+        <ion-input (keyup)="setMR()"
+                   type="text" formControlName="tendida" placeholder=""></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Rollo</ion-label>
-        <ion-input type="text" formControlName="rollo" placeholder=""></ion-input>
+        <ion-input (keyup)="setMR()"
+                   type="text" formControlName="rollo" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item style="margin-bottom:25px">
+        <ion-label >Marca Rollo: {{ marca_rollo }}</ion-label>
       </ion-item>
 
       <ion-item>
@@ -43,10 +50,6 @@
         </ion-select>
       </ion-item>
 
-      <ion-item>
-        <p>{{ _login.myPhoto2 }}</p>
-        <img src="{{ _login.myPhoto2 }}" alt="">
-      </ion-item>
 
       <ion-item>
         <ion-label floating>Coordenadas GPS</ion-label>
@@ -64,36 +67,45 @@
       </ion-item>
 
       <ion-item>
-        <ion-label floating>Diametro 1</ion-label>
-        <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>
+        <!-- <p>{{ _login.myPhoto2 }}</p> -->
+        <img src="{{ _login.myPhoto2 }}" alt="">
       </ion-item>
 
       <ion-item>
-        <ion-label floating>Diametro 2</ion-label>
-        <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>
+        <ion-label floating>Diametro 1 en Mts</ion-label>
+        <ion-input (keyup)="setVolumenInline()"
+                   type="number" formControlName="diametro_1" placeholder=""></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label floating>Largo</ion-label>
-        <ion-input type="text" formControlName="largo" placeholder=""></ion-input>
+        <ion-label floating>Diametro 2 en Mts</ion-label>
+        <ion-input (keyup)="setVolumenInline()"
+                   type="number" formControlName="diametro_2" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Largo en Mts</ion-label>
+        <ion-input (keyup)="setVolumenInline()"
+                   type="number" formControlName="largo" placeholder=""></ion-input>
+      </ion-item>
+
+      <ion-item style="margin-top:10px">
+        <ion-label style="padding-bottom:8px">Volumen: {{ volumen }} m3</ion-label>
       </ion-item>
 
       <!-- <ion-item>
-        <ion-label floating>Volumen</ion-label>
-        <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>
+        <ion-label floating>Código Rollo</ion-label>
+        <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>
       </ion-item> -->
 
       <ion-item>
-        <ion-label floating>Código Rollo</ion-label>
-        <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <button style="margin-bottom:20px; height:35px"
-                ion-button full (click)="saveLocalInforme()">Guardar Informe</button>
+        <button style="margin-bottom:20px; height:35px" [disabled]="!formaLinea.valid"
+                ion-button full (click)="saveLocalInforme()">Guardar Registro de APEO</button>
       </ion-item>
 
     </form>
 
   </ion-list>
+
+
 </ion-content>

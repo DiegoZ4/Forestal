@@ -16,7 +16,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-
+  volumen: number;
+  volumenA: number;
+  volumenB: number;
+  volumenC: number;
 
   pet: string = "pagos";
   id:string;
@@ -32,13 +35,15 @@ export class ContactPage {
 
   informesLocal = [];
 
+  marca_rollo:string;
+
   formaLinea:FormGroup;
 
   constructor(
     public navCtrl: NavController,
-    private _login:ServicesLoginProvider,
+    public _login:ServicesLoginProvider,
     public navParams: NavParams,
-    private geolocation2: Geolocation,
+    public geolocation2: Geolocation,
     private camera: Camera,
     public toastCtrl: ToastController
   ) {
@@ -65,11 +70,13 @@ export class ContactPage {
           tendida: new FormControl('', Validators.required),
           rollo: new FormControl('', Validators.required),
           especie: new FormControl('', Validators.required),
+          especie_cat: new FormControl('', Validators.required),
           diametro_1: new FormControl('', Validators.required),
           diametro_2: new FormControl('', Validators.required),
           largo: new FormControl('', Validators.required),
           volumen: new FormControl('', Validators.required),
-          codigo_rollo: new FormControl('', Validators.required)
+          codigo_rollo: new FormControl('', Validators.required),
+          marca_rollo: new FormControl('', Validators.required)
         })
 
     if(this.id != 'nuevo'){
@@ -90,6 +97,12 @@ export class ContactPage {
       this.formaLinea.controls['codigo_rollo'].setValue(this.informesLocal[this.informe].codigo_rollo);
       this.formaLinea.controls['foto'].setValue(this.informesLocal[this.informe].foto);
       this.formaLinea.controls['archivo'].setValue(this.informesLocal[this.informe].codigo_rollo);
+
+      this.volumen = this.informesLocal[this.informe].volumen;
+      this.marca_rollo = this.informesLocal[this.informe].marca_rollo
+
+
+
     }else{
       this.nombre = 'Generar un nuevo informe';
     }
@@ -131,47 +144,100 @@ export class ContactPage {
     // navigator.geolocation.clearWatch(watch);
   }
 
+  setMR(){
+    console.log("into setMR")
+    this.marca_rollo = "R"+this.formaLinea.controls['rodal'].value+this.formaLinea.controls['tendida'].value+this.formaLinea.controls['rollo'].value;
+  }
+
+  setVolumen(categoria){
+    
+    
+
+    this.volumen = (parseInt(this.formaLinea.controls['diametro_1'].value) * parseInt(this.formaLinea.controls['diametro_2'].value) * parseInt(this.formaLinea.controls['largo'].value)) * 0.7854;
+
+    let volumenes = JSON.parse(localStorage.getItem('volumenes'));
+
+    console.log(volumenes)
+
+    if(categoria == "A"){
+      volumenes.A = parseInt(volumenes.A) - this.volumen;
+    } if(categoria == "B") {
+      volumenes.B = parseInt(volumenes.B) - this.volumen;
+    }else if(categoria == "C"){
+      volumenes.C = parseInt(volumenes.C) - this.volumen;
+    }
+
+    console.log(volumenes)
+
+    localStorage.setItem('volumenes',JSON.stringify(volumenes));
+    this.formaLinea.controls['especie_cat'].setValue(categoria);
+  }
+
+  setVolumenInline(categoria){
+    console.log(parseFloat(this.formaLinea.controls['diametro_1'].value))
+
+    if(this.formaLinea.controls['diametro_1'].value && this.formaLinea.controls['diametro_2'].value && this.formaLinea.controls['largo'].value) {
+      this.volumen = (parseFloat(this.formaLinea.controls['diametro_1'].value) * parseFloat(this.formaLinea.controls['diametro_2'].value) * parseFloat(this.formaLinea.controls['largo'].value)) * 0.7854;
+    }
+
+  }
+
   saveLocalInforme(){
     let informes = [];
     informes = JSON.parse(localStorage.getItem('informes')) || [];
 
-    let volumen = (parseInt(this.formaLinea.controls['diametro_1'].value) * parseInt(this.formaLinea.controls['diametro_2'].value) * parseInt(this.formaLinea.controls['largo'].value)) * 0.7854
-    this.formaLinea.controls['volumen'].setValue(volumen);
+    this.formaLinea.controls['volumen'].setValue(this.volumen);
+    this.formaLinea.controls['marca_rollo'].setValue(this.marca_rollo);
+    this.formaLinea.controls['codigo_rollo'].setValue(this.marca_rollo);
 
-    if(informes[this.informe]){
-      informes[this.informe].gps = this.formaLinea.controls['gps'].value;
-      informes[this.informe].rollo = this.formaLinea.controls['rollo'].value;
-      informes[this.informe].tendida = this.formaLinea.controls['tendida'].value;
-      informes[this.informe].rodal = this.formaLinea.controls['rodal'].value;
-      informes[this.informe].especie = this.formaLinea.controls['especie'].value;
-      informes[this.informe].diametro_1 = this.formaLinea.controls['diametro_1'].value;
-      informes[this.informe].diametro_2 = this.formaLinea.controls['diametro_2'].value;
-      informes[this.informe].largo = this.formaLinea.controls['largo'].value;
-      informes[this.informe].volumen = volumen;
-      informes[this.informe].codigo_rollo = this.formaLinea.controls['codigo_rollo'].value;
-    }else{
-      informes.push(this.formaLinea.value);
-    }
+    this._login.getEspecie(this.formaLinea.controls['especie'].value)
+        .subscribe( (resp:any)=>{
+          console.log(resp);
+          console.log(resp[0]);
+          console.log(resp[0].categ);
 
-    console.log(JSON.parse(localStorage.getItem('informes')));
-    console.log(this.formaLinea.value)
-    console.log(informes)
+          this.setVolumen(resp[0].categ);
 
-    localStorage.setItem('informes', JSON.stringify(informes));
+          if(informes[this.informe]){
+            informes[this.informe].gps = this.formaLinea.controls['gps'].value;
+            informes[this.informe].rollo = this.formaLinea.controls['rollo'].value;
+            informes[this.informe].tendida = this.formaLinea.controls['tendida'].value;
+            informes[this.informe].rodal = this.formaLinea.controls['rodal'].value;
+            informes[this.informe].especie = this.formaLinea.controls['especie'].value;
+            informes[this.informe].especie_cat = this.formaLinea.controls['especie_cat'].value;
+            informes[this.informe].diametro_1 = this.formaLinea.controls['diametro_1'].value;
+            informes[this.informe].diametro_2 = this.formaLinea.controls['diametro_2'].value;
+            informes[this.informe].largo = this.formaLinea.controls['largo'].value;
+            informes[this.informe].volumen = this.volumen;
+            informes[this.informe].codigo_rollo = this.marca_rollo;
+          }else{
+            informes.push(this.formaLinea.value);
+          }
 
-    const toast = this.toastCtrl.create({
-        message: 'Informe agregado correctamente',
-        duration: 3000
-    });
-    toast.present();
+          console.log(JSON.parse(localStorage.getItem('informes')));
+          console.log(this.formaLinea.value)
+          console.log(informes)
 
-    this.formaLinea.reset()
-    this.goToInfo();
+          localStorage.setItem('informes', JSON.stringify(informes));
 
-    console.log(informes);
+          const toast = this.toastCtrl.create({
+              message: 'Informe agregado correctamente',
+              duration: 3000
+          });
+          toast.present();
+
+          this.formaLinea.reset()
+          this.goToInfo();
+
+          console.log(informes);
+
+        })
+
+
   }
 
   takePhoto(){
+    alert("intro function")
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -179,6 +245,7 @@ export class ContactPage {
       mediaType: this.camera.MediaType.PICTURE
     }
 
+    alert(options)
     this.camera.getPicture(options).then((imageData) => {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
@@ -194,6 +261,7 @@ export class ContactPage {
 
     }, (err) => {
      // Handle error
+     alert(err)
     });
   }
 

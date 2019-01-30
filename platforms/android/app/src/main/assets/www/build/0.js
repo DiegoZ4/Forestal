@@ -80,6 +80,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  */
 var InfoClientePage = /** @class */ (function () {
     function InfoClientePage(navCtrl, navParams, _login, geolocation, geolocation2, camera, transfer, file, loadingCtrl, toastCtrl) {
+        // console.log(this.fechaActualParse);
         var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
@@ -103,9 +104,21 @@ var InfoClientePage = /** @class */ (function () {
         this.fechaActual = new Date();
         this.day = this.fechaActual.getDate() < 10 ? "0" + this.fechaActual.getDate() : this.fechaActual.getDate();
         this.fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.day;
-        console.log(this.fechaActualParse);
         this.requerimientos = JSON.parse(localStorage.getItem('requerimientos'));
         this.informes = JSON.parse(localStorage.getItem('informes'));
+        // if(this.informes){
+        //   for(let informe of this.informes){
+        //     console.log(informe)
+        //     if(informe.especie_cat == 'A') {
+        //       console.log("descuenta a: " + this.volumenA)
+        //       this.volumenA = this.volumenA - informe.volumen;
+        //     }else if(informe.especie_cat == 'B') {
+        //       this.volumenB = this.volumenB - informe.volumen;
+        //     }else if(informe.especie_cat == 'C') {
+        //       this.volumenC = this.volumenC - informe.volumen;
+        //     }
+        //   }
+        // }
         console.log(this.navParams.get('id'));
         this.id = this.navParams.get('id');
         this.formaInforme = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
@@ -143,6 +156,24 @@ var InfoClientePage = /** @class */ (function () {
         });
         this.requerimiento = this.requerimientos.find(function (x) { return x.id === _this.id; });
         console.log(this.requerimiento);
+        if (!localStorage.getItem('informes')) {
+            this.volumenA = this.requerimiento.volumen_A;
+            this.volumenB = this.requerimiento.volumen_B;
+            this.volumenC = this.requerimiento.volumen_C;
+            var volumenes = {
+                A: this.volumenA,
+                B: this.volumenB,
+                C: this.volumenC
+            };
+            localStorage.setItem('volumenes', JSON.stringify(volumenes));
+        }
+        else {
+            var volSave = JSON.parse(localStorage.getItem('volumenes'));
+            console.log(volSave);
+            this.volumenA = volSave.A;
+            this.volumenB = volSave.B;
+            this.volumenC = volSave.C;
+        }
         this._login.getProveedores()
             .subscribe(function (resp3) {
             console.log(resp3);
@@ -185,7 +216,7 @@ var InfoClientePage = /** @class */ (function () {
             // imageData is either a base64 encoded string or a file URI
             // If it's base64 (DATA_URL):
             // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-            // alert(imageData)
+            alert(imageData);
             _this._login.myPhoto = imageData;
             var imageName = imageData.split("/");
             _this.formaInforme.controls['foto'].setValue(imageName.pop());
@@ -217,12 +248,12 @@ var InfoClientePage = /** @class */ (function () {
         //file transfer action
         fileTransfer.upload(this._login.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
             .then(function (data) {
-            alert(data);
-            alert("Success");
+            // alert(data);
+            // alert("Success");
             loader.dismiss();
         }, function (err) {
-            alert('error: ' + err);
-            alert("Error");
+            // alert('error: '+err);
+            // alert("Error");
             loader.dismiss();
         });
     };
@@ -272,7 +303,7 @@ var InfoClientePage = /** @class */ (function () {
     };
     InfoClientePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-info-cliente',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Información del Requerimiento\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="goToHome()"\n              ion-button icon-only color="royal">\n        <ion-icon name="home"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n<!--\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="pagos">\n        Cuentas Corrientes\n      </ion-segment-button>\n      <ion-segment-button value="notas">\n        Prov/Compr\n      </ion-segment-button>\n      <ion-segment-button value="descargar">\n        Prov/NC\n      </ion-segment-button>\n      <ion-segment-button value="faltantes">\n        Prov/Falt\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar> -->\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Instrumento Legal</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.instrumento_legal}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Nomenclatura Catastral</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.nomenclatura_catastral}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Titular</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_titular}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Lote Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.lote_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Obrajero</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_obrajero}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Guia Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.guia_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen A</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_A}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen B</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_B}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen C</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_C}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="puppies">\n        Encabezado\n      </ion-segment-button>\n      <ion-segment-button value="kittens">\n        Informes\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar>\n\n  <div [ngSwitch]="pet">\n    <ion-list *ngSwitchCase="\'puppies\'">\n      <form [formGroup]="formaInforme">\n\n        <ion-item>\n          <ion-label floating>Fecha</ion-label>\n          <ion-input type="date" formControlName="fecha" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Remito</ion-label>\n          <ion-input type="number" formControlName="remito" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <p>{{ _login.myPhoto }}</p>\n          <img src="{{ _login.myPhoto }}" alt="">\n        </ion-item>\n\n        <!-- <pre>{{ formaInforme.value | json }}</pre> -->\n        <ion-item>\n          <ion-label floating>Coordenadas GPS del Camión</ion-label>\n          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takeGPSCamion()"\n                  color="light" ion-button full>Tomar Coordenadas GPS del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takePhotoCamion()"\n                  color="light" ion-button full>Sacar foto del Camión</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px"\n                  ion-button full (click)="saveLocal()">Guardar Encabezado</button>\n        </ion-item>\n\n      </form>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'kittens\'">\n      <ion-card>\n        <ion-card-header>\n         <button ion-button full (click)="goToMyPage(\'nuevo\',\'\')">Generar nuevo informe</button>\n        </ion-card-header>\n\n        <ion-list>\n\n          <ion-item *ngFor="let informe of informes; let i = index">\n            <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>\n            <p>Especie: {{ informe.especie}}</p>\n            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver informe</button>\n          </ion-item>\n\n        </ion-list>\n\n      </ion-card>\n\n      <!--  -->\n    </ion-list>\n\n\n  </div>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/,
+            selector: 'page-info-cliente',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/'<ion-header>\n  <ion-navbar color=primary>\n    <ion-title>\n      Información del Requerimiento\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="goToHome()"\n              ion-button icon-only color="royal">\n        <ion-icon name="home"></ion-icon>\n      </button>\n    </ion-buttons>\n\n  </ion-navbar>\n<!--\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="pagos">\n        Cuentas Corrientes\n      </ion-segment-button>\n      <ion-segment-button value="notas">\n        Prov/Compr\n      </ion-segment-button>\n      <ion-segment-button value="descargar">\n        Prov/NC\n      </ion-segment-button>\n      <ion-segment-button value="faltantes">\n        Prov/Falt\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar> -->\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-grid>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Instrumento Legal</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.instrumento_legal}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Nomenclatura Catastral</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.nomenclatura_catastral}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Titular</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_titular}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Lote Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.lote_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Cuit Obrajero</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.cuit_obrajero}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Guia Nro.</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.guia_nro}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen A</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_A}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen B</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_B}}</div>\n        </div>\n      </ion-col>\n      <ion-col>\n        <div>\n          <div style="font-weight:600; font-size:13pt">Volumen C</div>\n          <div  style="font-weight:400; font-size:12pt">{{requerimiento.volumen_C}}</div>\n        </div>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n  <ion-toolbar no-border-top>\n    <ion-segment [(ngModel)]="pet">\n      <ion-segment-button value="puppies" style="max-width:200px">\n        REGISTRO DE CARGA\n      </ion-segment-button>\n      <ion-segment-button value="kittens" style="max-width:200px">\n        REGISTRO DE APEO\n      </ion-segment-button>\n    </ion-segment>\n  </ion-toolbar>\n\n  <div [ngSwitch]="pet">\n    <ion-list *ngSwitchCase="\'puppies\'">\n      <form [formGroup]="formaInforme">\n\n        <ion-item>\n          <ion-label floating>Fecha</ion-label>\n          <ion-input type="date" formControlName="fecha" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label floating>Remito</ion-label>\n          <ion-input type="number" formControlName="remito" placeholder=""></ion-input>\n        </ion-item>\n\n        <!-- <pre>{{ formaInforme.value | json }}</pre> -->\n        <ion-item>\n          <ion-label floating>Coordenadas GPS de la planchada</ion-label>\n          <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takeGPSCamion()"\n                  color="light" ion-button full>Tomar Coordenadas GPS de la planchada</button>\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px" (click)="takePhotoCamion()"\n                  color="light" ion-button full>Sacar foto de la planchada</button>\n        </ion-item>\n\n        <ion-item>\n          <!-- <p>{{ _login.myPhoto }}</p> -->\n          <img src="{{ _login.myPhoto }}" alt="">\n        </ion-item>\n\n        <ion-item>\n          <button style="margin-bottom:20px; height:35px"\n                  ion-button full (click)="saveLocal()">Guardar Registro</button>\n        </ion-item>\n\n      </form>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'kittens\'">\n      <ion-card>\n        <ion-card-header>\n         <button ion-button full (click)="goToMyPage(\'nuevo\',\'\')">Generar nuevo registro de APEO</button>\n        </ion-card-header>\n\n        <ion-list>\n\n          <ion-item *ngFor="let informe of informes; let i = index">\n            <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>\n            <p>Especie Cat.: {{ informe.especie_cat}} | Cortado: {{ informe.volumen }}</p>\n            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver </button>\n          </ion-item>\n\n        </ion-list>\n\n      </ion-card>\n\n      <!--  -->\n    </ion-list>\n\n\n  </div>\n\n\n</ion-content>\n\n\n<ion-footer>\n\n  <div style="position:relative; bottom:0px; height:70px; font-size: 11pt; padding-top: 0px; background:#488aff">\n    <div style="float:left; color:#444; width:100%; font-size: 10pt; text-align: center; background:#e4e4e4; padding:8px 0px">\n      SALDO GUÍA\n    </div>\n    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">\n      A: {{volumenA}} m3\n    </div>\n    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">\n      B: {{volumenB}} m3\n    </div>\n    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">\n      C: {{volumenC}} m3\n    </div>\n  </div>\n</ion-footer>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/info-cliente/info-cliente.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],

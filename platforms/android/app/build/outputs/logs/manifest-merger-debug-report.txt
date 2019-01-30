@@ -1,25 +1,14 @@
 -- Merging decision tree log ---
-provider#org.apache.cordova.camera.FileProvider
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:12:9-14:20
-	android:grantUriPermissions
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:12:92-126
-	android:authorities
-		INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:12:19-66
-	android:exported
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:12:67-91
-	android:name
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:12:127-180
 manifest
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
 MERGED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:17:1-27:12
 MERGED from [:CordovaLib] /home/diego/Documentos/Forestal/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:20:1-27:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
-INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-21:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
+INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:1-18:12
 	package
 		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:2:98-129
 		INJECTED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml
@@ -55,17 +44,19 @@ ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/Androi
 	android:name
 		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:4:22-64
 application
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:5-15:19
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:5-12:19
 MERGED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:25:5-20
 	android:supportsRtl
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:114-140
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:134-160
 	android:label
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:81-113
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:101-133
 	android:hardwareAccelerated
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:18-52
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:38-72
+	allowBackup
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:18-37
 	android:icon
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:53-80
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:5:73-100
 activity#dz.forestal.softpower.MainActivity
 ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:6:9-11:20
 	android:label
@@ -93,7 +84,7 @@ ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/Androi
 	android:name
 		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:9:27-74
 uses-sdk
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:16:5-74
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:5-74
 MERGED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:21:5-23:54
 MERGED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:21:5-23:54
 MERGED from [:CordovaLib] /home/diego/Documentos/Forestal/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:25:5-44
@@ -101,28 +92,22 @@ MERGED from [:CordovaLib] /home/diego/Documentos/Forestal/platforms/android/Cord
 	tools:overrideLibrary
 		ADDED from [com.android.support:support-v4:24.1.1] /home/diego/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/9add1d9d9d989676a35d3f4b54490fc4/AndroidManifest.xml:23:9-51
 	android:targetSdkVersion
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:16:42-71
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:42-71
 	android:minSdkVersion
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:16:15-41
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:15-41
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:14:5-81
+	android:name
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:14:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:15:5-79
+	android:name
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:15:22-76
+uses-feature#android.hardware.location.gps
+ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:16:5-66
+	android:name
+		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:16:19-63
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:17:5-81
 	android:name
 		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:17:22-78
-uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:18:5-79
-	android:name
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:18:22-76
-uses-feature#android.hardware.location.gps
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:19:5-66
-	android:name
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:19:19-63
-uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:20:5-81
-	android:name
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:20:22-78
-meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:13-123
-	android:resource
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:75-120
-	android:name
-		ADDED from /home/diego/Documentos/Forestal/platforms/android/app/src/main/AndroidManifest.xml:13:24-74

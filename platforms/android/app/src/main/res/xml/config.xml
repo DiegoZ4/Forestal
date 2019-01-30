@@ -25,11 +25,14 @@
     <feature name="FileTransfer">
         <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
     </feature>
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
     <feature name="Keyboard">
         <param name="android-package" onload="true" value="io.ionic.keyboard.IonicKeyboard" />
     </feature>
-    <name>Forestal</name>
-    <description>Aplicación de control</description>
+    <name> Codigo R </name>
+    <description>Sistema de Trazabilidad</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Softpower</author>
     <content src="index.html" />
     <access origin="*" />
@@ -39,6 +42,9 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
+        <application allowBackup="false" />
+    </edit-config>
     <allow-intent href="market:*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />

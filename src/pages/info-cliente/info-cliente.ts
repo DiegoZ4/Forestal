@@ -59,6 +59,11 @@ export class InfoClientePage {
   day = this.fechaActual.getDate() < 10 ? "0"+this.fechaActual.getDate() : this.fechaActual.getDate();
   fechaActualParse = this.fechaActual.getFullYear() + "-" + (this.fechaActual.getMonth() + 1) + "-" + this.day;
 
+
+  volumenA:number;
+  volumenB:number;
+  volumenC:number;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -71,10 +76,24 @@ export class InfoClientePage {
     private loadingCtrl:LoadingController,
     public toastCtrl: ToastController
   ) {
-    console.log(this.fechaActualParse);
+    // console.log(this.fechaActualParse);
 
     this.requerimientos = JSON.parse(localStorage.getItem('requerimientos'));
     this.informes = JSON.parse(localStorage.getItem('informes'));
+
+    // if(this.informes){
+    //   for(let informe of this.informes){
+    //     console.log(informe)
+    //     if(informe.especie_cat == 'A') {
+    //       console.log("descuenta a: " + this.volumenA)
+    //       this.volumenA = this.volumenA - informe.volumen;
+    //     }else if(informe.especie_cat == 'B') {
+    //       this.volumenB = this.volumenB - informe.volumen;
+    //     }else if(informe.especie_cat == 'C') {
+    //       this.volumenC = this.volumenC - informe.volumen;
+    //     }
+    //   }
+    // }
 
 
     console.log( this.navParams.get('id'));
@@ -117,6 +136,32 @@ export class InfoClientePage {
 
     this.requerimiento =  this.requerimientos.find( x => x.id === this.id );
     console.log(this.requerimiento);
+
+
+
+    if(!localStorage.getItem('informes')){
+
+      this.volumenA = this.requerimiento.volumen_A;
+      this.volumenB = this.requerimiento.volumen_B;
+      this.volumenC = this.requerimiento.volumen_C;
+
+      let volumenes = {
+        A:this.volumenA,
+        B:this.volumenB,
+        C:this.volumenC
+      }
+
+      localStorage.setItem('volumenes', JSON.stringify(volumenes));
+
+    }else{
+
+      let volSave = JSON.parse(localStorage.getItem('volumenes'));
+      console.log(volSave)
+      this.volumenA = volSave.A;
+      this.volumenB = volSave.B;
+      this.volumenC = volSave.C;
+
+    }
 
     this._login.getProveedores()
         .subscribe( (resp3:any)=>{
@@ -167,7 +212,7 @@ export class InfoClientePage {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
      // this.myPhoto = 'data:image/jpeg;base64,' + imageData;
-     // alert(imageData)
+     alert(imageData)
      this._login.myPhoto = imageData;
 
      let imageName = imageData.split("/");
@@ -209,12 +254,12 @@ export class InfoClientePage {
    //file transfer action
    fileTransfer.upload(this._login.myPhoto, 'http://appsausol.com.ar.elserver.com/forestal/subeFoto.php', options)
      .then((data) => {
-       alert(data);
-       alert("Success");
+       // alert(data);
+       // alert("Success");
        loader.dismiss();
      }, (err) => {
-       alert('error: '+err);
-       alert("Error");
+       // alert('error: '+err);
+       // alert("Error");
        loader.dismiss();
      });
   }

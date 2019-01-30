@@ -39,6 +39,10 @@
             {
               "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"Permissions\"><param name=\"android-package\" value=\"com.android.plugins.Permissions\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -73,10 +77,20 @@
               "count": 3
             }
           ],
-          "application": [
+          "application": [],
+          "/manifest/application": [
             {
-              "xml": "<provider android:authorities=\"${applicationId}.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"org.apache.cordova.camera.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/camera_provider_paths\" /></provider>",
-              "count": 1
+              "xml": "<application allowBackup=\"false\" />",
+              "count": 1,
+              "mode": "merge",
+              "id": "config.xml",
+              "oldAttrib": {
+                "allowBackup": "false",
+                "android:hardwareAccelerated": "true",
+                "android:icon": "@mipmap/icon",
+                "android:label": "@string/app_name",
+                "android:supportsRtl": "true"
+              }
             }
           ]
         }
@@ -109,6 +123,9 @@
       "PACKAGE_NAME": "dz.forestal.softpower"
     },
     "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "dz.forestal.softpower"
+    },
+    "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "dz.forestal.softpower"
     }
   },
@@ -372,6 +389,14 @@
       "clobbers": [
         "window.FileTransfer"
       ]
+    },
+    {
+      "id": "cordova-plugin-android-permissions.Permissions",
+      "file": "plugins/cordova-plugin-android-permissions/www/permissions.js",
+      "pluginId": "cordova-plugin-android-permissions",
+      "clobbers": [
+        "cordova.plugins.permissions"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -383,6 +408,7 @@
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-file-transfer": "1.7.1"
+    "cordova-plugin-file-transfer": "1.7.1",
+    "cordova-plugin-android-permissions": "1.0.0"
   }
 }

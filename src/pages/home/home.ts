@@ -44,7 +44,21 @@ export class HomePage {
     this._login.login(this.loginForm.value)
     .subscribe((resp:any)=>{
       console.log(resp.length)
+      console.log(resp[0].cuit)
+
+      this._login.cuit = resp[0].cuit;
       if(resp.length > 0){
+        let volumenes = {
+          A:null,
+          B:null,
+          C:null
+        }
+
+        if(!localStorage.getItem('volumenes')){
+            localStorage.setItem('volumenes', JSON.stringify(volumenes));
+        }
+
+
         this.navCtrl.push(AboutPage)
       }else{
         this.showAlert();

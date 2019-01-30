@@ -258,6 +258,14 @@ module.exports = [
     "clobbers": [
       "window.FileTransfer"
     ]
+  },
+  {
+    "id": "cordova-plugin-android-permissions.Permissions",
+    "file": "plugins/cordova-plugin-android-permissions/www/permissions.js",
+    "pluginId": "cordova-plugin-android-permissions",
+    "clobbers": [
+      "cordova.plugins.permissions"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -271,7 +279,8 @@ module.exports.metadata =
   "cordova-plugin-geolocation": "4.0.1",
   "cordova-plugin-camera": "4.0.3",
   "cordova-plugin-file": "6.0.1",
-  "cordova-plugin-file-transfer": "1.7.1"
+  "cordova-plugin-file-transfer": "1.7.1",
+  "cordova-plugin-android-permissions": "1.0.0"
 };
 // BOTTOM OF METADATA
 });

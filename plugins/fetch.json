@@ -52,7 +52,7 @@
   "cordova-plugin-camera": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-camera@4.0.3"
+      "id": "cordova-plugin-camera@^4.0.3"
     },
     "is_top_level": true,
     "variables": {}
@@ -69,6 +69,24 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-file@^6.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-allow-backup": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-allow-backup@0.0.2"
+    },
+    "is_top_level": true,
+    "variables": {
+      "BACKUP": "false"
+    }
+  },
+  "cordova-plugin-android-permissions": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-android-permissions"
     },
     "is_top_level": true,
     "variables": {}

@@ -98,11 +98,11 @@
 
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="pet">
-      <ion-segment-button value="puppies">
-        Encabezado
+      <ion-segment-button value="puppies" style="max-width:200px">
+        REGISTRO DE CARGA
       </ion-segment-button>
-      <ion-segment-button value="kittens">
-        Informes
+      <ion-segment-button value="kittens" style="max-width:200px">
+        REGISTRO DE APEO
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -121,30 +121,30 @@
           <ion-input type="number" formControlName="remito" placeholder=""></ion-input>
         </ion-item>
 
-        <ion-item>
-          <p>{{ _login.myPhoto }}</p>
-          <img src="{{ _login.myPhoto }}" alt="">
-        </ion-item>
-
         <!-- <pre>{{ formaInforme.value | json }}</pre> -->
         <ion-item>
-          <ion-label floating>Coordenadas GPS del Camión</ion-label>
+          <ion-label floating>Coordenadas GPS de la planchada</ion-label>
           <ion-input type="text" formControlName="gps" placeholder=""></ion-input>
         </ion-item>
 
         <ion-item>
           <button style="margin-bottom:20px; height:35px" (click)="takeGPSCamion()"
-                  color="light" ion-button full>Tomar Coordenadas GPS del Camión</button>
+                  color="light" ion-button full>Tomar Coordenadas GPS de la planchada</button>
         </ion-item>
 
         <ion-item>
           <button style="margin-bottom:20px; height:35px" (click)="takePhotoCamion()"
-                  color="light" ion-button full>Sacar foto del Camión</button>
+                  color="light" ion-button full>Sacar foto de la planchada</button>
+        </ion-item>
+
+        <ion-item>
+          <!-- <p>{{ _login.myPhoto }}</p> -->
+          <img src="{{ _login.myPhoto }}" alt="">
         </ion-item>
 
         <ion-item>
           <button style="margin-bottom:20px; height:35px"
-                  ion-button full (click)="saveLocal()">Guardar Encabezado</button>
+                  ion-button full (click)="saveLocal()">Guardar Registro</button>
         </ion-item>
 
       </form>
@@ -153,15 +153,15 @@
     <ion-list *ngSwitchCase="'kittens'">
       <ion-card>
         <ion-card-header>
-         <button ion-button full (click)="goToMyPage('nuevo','')">Generar nuevo informe</button>
+         <button ion-button full (click)="goToMyPage('nuevo','')">Generar nuevo registro de APEO</button>
         </ion-card-header>
 
         <ion-list>
 
           <ion-item *ngFor="let informe of informes; let i = index">
             <h2>Código Rollo: {{ informe.codigo_rollo}}</h2>
-            <p>Especie: {{ informe.especie}}</p>
-            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver informe</button>
+            <p>Especie Cat.: {{ informe.especie_cat}} | Cortado: {{ informe.volumen }}</p>
+            <button ion-button clear item-end (click)="goToMyPage(informe.nro_requerimiento, i)">Ver </button>
           </ion-item>
 
         </ion-list>
@@ -176,3 +176,22 @@
 
 
 </ion-content>
+
+
+<ion-footer>
+
+  <div style="position:relative; bottom:0px; height:70px; font-size: 11pt; padding-top: 0px; background:#488aff">
+    <div style="float:left; color:#444; width:100%; font-size: 10pt; text-align: center; background:#e4e4e4; padding:8px 0px">
+      SALDO GUÍA
+    </div>
+    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">
+      A: {{volumenA}} m3
+    </div>
+    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">
+      B: {{volumenB}} m3
+    </div>
+    <div style="float:left; color:white; width:33%; padding-top: 10px; text-align:center">
+      C: {{volumenC}} m3
+    </div>
+  </div>
+</ion-footer>

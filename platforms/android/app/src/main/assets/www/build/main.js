@@ -60,11 +60,13 @@ var ContactPage = /** @class */ (function () {
             tendida: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             rollo: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             especie: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
+            especie_cat: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             diametro_1: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             diametro_2: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             largo: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
             volumen: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
-            codigo_rollo: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required)
+            codigo_rollo: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required),
+            marca_rollo: new __WEBPACK_IMPORTED_MODULE_6__angular_forms__["a" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_6__angular_forms__["g" /* Validators */].required)
         });
         if (this.id != 'nuevo') {
             this.nombre = 'Editar informe';
@@ -81,6 +83,8 @@ var ContactPage = /** @class */ (function () {
             this.formaLinea.controls['codigo_rollo'].setValue(this.informesLocal[this.informe].codigo_rollo);
             this.formaLinea.controls['foto'].setValue(this.informesLocal[this.informe].foto);
             this.formaLinea.controls['archivo'].setValue(this.informesLocal[this.informe].codigo_rollo);
+            this.volumen = this.informesLocal[this.informe].volumen;
+            this.marca_rollo = this.informesLocal[this.informe].marca_rollo;
         }
         else {
             this.nombre = 'Generar un nuevo informe';
@@ -115,47 +119,86 @@ var ContactPage = /** @class */ (function () {
         // Clear watch
         // navigator.geolocation.clearWatch(watch);
     };
+    ContactPage.prototype.setMR = function () {
+        console.log("into setMR");
+        this.marca_rollo = "R" + this.formaLinea.controls['rodal'].value + this.formaLinea.controls['tendida'].value + this.formaLinea.controls['rollo'].value;
+    };
+    ContactPage.prototype.setVolumen = function (categoria) {
+        this.volumen = (parseInt(this.formaLinea.controls['diametro_1'].value) * parseInt(this.formaLinea.controls['diametro_2'].value) * parseInt(this.formaLinea.controls['largo'].value)) * 0.7854;
+        var volumenes = JSON.parse(localStorage.getItem('volumenes'));
+        console.log(volumenes);
+        if (categoria == "A") {
+            volumenes.A = parseInt(volumenes.A) - this.volumen;
+        }
+        if (categoria == "B") {
+            volumenes.B = parseInt(volumenes.B) - this.volumen;
+        }
+        else if (categoria == "C") {
+            volumenes.C = parseInt(volumenes.C) - this.volumen;
+        }
+        console.log(volumenes);
+        localStorage.setItem('volumenes', JSON.stringify(volumenes));
+        this.formaLinea.controls['especie_cat'].setValue(categoria);
+    };
+    ContactPage.prototype.setVolumenInline = function (categoria) {
+        console.log(parseFloat(this.formaLinea.controls['diametro_1'].value));
+        if (this.formaLinea.controls['diametro_1'].value && this.formaLinea.controls['diametro_2'].value && this.formaLinea.controls['largo'].value) {
+            this.volumen = (parseFloat(this.formaLinea.controls['diametro_1'].value) * parseFloat(this.formaLinea.controls['diametro_2'].value) * parseFloat(this.formaLinea.controls['largo'].value)) * 0.7854;
+        }
+    };
     ContactPage.prototype.saveLocalInforme = function () {
+        var _this = this;
         var informes = [];
         informes = JSON.parse(localStorage.getItem('informes')) || [];
-        var volumen = (parseInt(this.formaLinea.controls['diametro_1'].value) * parseInt(this.formaLinea.controls['diametro_2'].value) * parseInt(this.formaLinea.controls['largo'].value)) * 0.7854;
-        this.formaLinea.controls['volumen'].setValue(volumen);
-        if (informes[this.informe]) {
-            informes[this.informe].gps = this.formaLinea.controls['gps'].value;
-            informes[this.informe].rollo = this.formaLinea.controls['rollo'].value;
-            informes[this.informe].tendida = this.formaLinea.controls['tendida'].value;
-            informes[this.informe].rodal = this.formaLinea.controls['rodal'].value;
-            informes[this.informe].especie = this.formaLinea.controls['especie'].value;
-            informes[this.informe].diametro_1 = this.formaLinea.controls['diametro_1'].value;
-            informes[this.informe].diametro_2 = this.formaLinea.controls['diametro_2'].value;
-            informes[this.informe].largo = this.formaLinea.controls['largo'].value;
-            informes[this.informe].volumen = volumen;
-            informes[this.informe].codigo_rollo = this.formaLinea.controls['codigo_rollo'].value;
-        }
-        else {
-            informes.push(this.formaLinea.value);
-        }
-        console.log(JSON.parse(localStorage.getItem('informes')));
-        console.log(this.formaLinea.value);
-        console.log(informes);
-        localStorage.setItem('informes', JSON.stringify(informes));
-        var toast = this.toastCtrl.create({
-            message: 'Informe agregado correctamente',
-            duration: 3000
+        this.formaLinea.controls['volumen'].setValue(this.volumen);
+        this.formaLinea.controls['marca_rollo'].setValue(this.marca_rollo);
+        this.formaLinea.controls['codigo_rollo'].setValue(this.marca_rollo);
+        this._login.getEspecie(this.formaLinea.controls['especie'].value)
+            .subscribe(function (resp) {
+            console.log(resp);
+            console.log(resp[0]);
+            console.log(resp[0].categ);
+            _this.setVolumen(resp[0].categ);
+            if (informes[_this.informe]) {
+                informes[_this.informe].gps = _this.formaLinea.controls['gps'].value;
+                informes[_this.informe].rollo = _this.formaLinea.controls['rollo'].value;
+                informes[_this.informe].tendida = _this.formaLinea.controls['tendida'].value;
+                informes[_this.informe].rodal = _this.formaLinea.controls['rodal'].value;
+                informes[_this.informe].especie = _this.formaLinea.controls['especie'].value;
+                informes[_this.informe].especie_cat = _this.formaLinea.controls['especie_cat'].value;
+                informes[_this.informe].diametro_1 = _this.formaLinea.controls['diametro_1'].value;
+                informes[_this.informe].diametro_2 = _this.formaLinea.controls['diametro_2'].value;
+                informes[_this.informe].largo = _this.formaLinea.controls['largo'].value;
+                informes[_this.informe].volumen = _this.volumen;
+                informes[_this.informe].codigo_rollo = _this.marca_rollo;
+            }
+            else {
+                informes.push(_this.formaLinea.value);
+            }
+            console.log(JSON.parse(localStorage.getItem('informes')));
+            console.log(_this.formaLinea.value);
+            console.log(informes);
+            localStorage.setItem('informes', JSON.stringify(informes));
+            var toast = _this.toastCtrl.create({
+                message: 'Informe agregado correctamente',
+                duration: 3000
+            });
+            toast.present();
+            _this.formaLinea.reset();
+            _this.goToInfo();
+            console.log(informes);
         });
-        toast.present();
-        this.formaLinea.reset();
-        this.goToInfo();
-        console.log(informes);
     };
     ContactPage.prototype.takePhoto = function () {
         var _this = this;
+        alert("intro function");
         var options = {
             quality: 100,
             destinationType: this.camera.DestinationType.FILE_URI,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE
         };
+        alert(options);
         this.camera.getPicture(options).then(function (imageData) {
             // imageData is either a base64 encoded string or a file URI
             // If it's base64 (DATA_URL):
@@ -168,11 +211,12 @@ var ContactPage = /** @class */ (function () {
             _this._login.myPhoto2Name = imageName.pop();
         }, function (err) {
             // Handle error
+            alert(err);
         });
     };
     ContactPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-contact',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/contact/contact.html"*/'<ion-header>\n\n  <ion-navbar color=primary>\n    <ion-title>\n      {{nombre}}\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="goToHome()"\n              ion-button icon-only color="royal">\n        <ion-icon name="home"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <form [formGroup]="formaLinea">\n\n      <!-- <pre>{{ formaLinea.value | json }}</pre> -->\n\n      <ion-item>\n        <ion-label floating>Rodal</ion-label>\n        <ion-input type="text" formControlName="rodal" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Tendida</ion-label>\n        <ion-input type="text" formControlName="tendida" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Rollo</ion-label>\n        <ion-input type="text" formControlName="rollo" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label>Especie</ion-label>\n        <ion-select formControlName="especie">\n          <ion-option *ngFor="let especie of especies"\n                      [value]="especie.id">{{ especie.nombre }}</ion-option>\n        </ion-select>\n      </ion-item>\n\n      <ion-item>\n        <p>{{ _login.myPhoto2 }}</p>\n        <img src="{{ _login.myPhoto2 }}" alt="">\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Coordenadas GPS</ion-label>\n        <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px" (click)="takeGPS()"\n                color="light" ion-button block>Tomar Coordenadas GPS</button>\n      </ion-item>\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px" (click)="takePhoto()"\n                color="light" ion-button block>Sacar foto</button>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Diametro 1</ion-label>\n        <ion-input type="text" formControlName="diametro_1" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Diametro 2</ion-label>\n        <ion-input type="text" formControlName="diametro_2" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Largo</ion-label>\n        <ion-input type="text" formControlName="largo" placeholder=""></ion-input>\n      </ion-item>\n\n      <!-- <ion-item>\n        <ion-label floating>Volumen</ion-label>\n        <ion-input type="text" formControlName="volumen" placeholder=""></ion-input>\n      </ion-item> -->\n\n      <ion-item>\n        <ion-label floating>Código Rollo</ion-label>\n        <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px"\n                ion-button full (click)="saveLocalInforme()">Guardar Informe</button>\n      </ion-item>\n\n    </form>\n\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/contact/contact.html"*/
+            selector: 'page-contact',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/contact/contact.html"*/'<ion-header>\n\n  <ion-navbar color=primary>\n    <ion-title>\n      Código R - Sistema de Trazabilidad\n    </ion-title>\n    <ion-buttons end>\n      <button (click)="goToHome()"\n              ion-button icon-only color="royal">\n        <ion-icon name="home"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <form [formGroup]="formaLinea">\n\n      <!-- <pre>{{ formaLinea.value | json }}</pre> -->\n\n      <ion-item>\n        <ion-label floating>Rodal</ion-label>\n        <ion-input (keyup)="setMR()"\n                   type="text" formControlName="rodal" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Tendida</ion-label>\n        <ion-input (keyup)="setMR()"\n                   type="text" formControlName="tendida" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Rollo</ion-label>\n        <ion-input (keyup)="setMR()"\n                   type="text" formControlName="rollo" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item style="margin-bottom:25px">\n        <ion-label >Marca Rollo: {{ marca_rollo }}</ion-label>\n      </ion-item>\n\n      <ion-item>\n        <ion-label>Especie</ion-label>\n        <ion-select formControlName="especie">\n          <ion-option *ngFor="let especie of especies"\n                      [value]="especie.id">{{ especie.nombre }}</ion-option>\n        </ion-select>\n      </ion-item>\n\n\n      <ion-item>\n        <ion-label floating>Coordenadas GPS</ion-label>\n        <ion-input type="text" formControlName="gps" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px" (click)="takeGPS()"\n                color="light" ion-button block>Tomar Coordenadas GPS</button>\n      </ion-item>\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px" (click)="takePhoto()"\n                color="light" ion-button block>Sacar foto</button>\n      </ion-item>\n\n      <ion-item>\n        <!-- <p>{{ _login.myPhoto2 }}</p> -->\n        <img src="{{ _login.myPhoto2 }}" alt="">\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Diametro 1 en Mts</ion-label>\n        <ion-input (keyup)="setVolumenInline()"\n                   type="number" formControlName="diametro_1" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Diametro 2 en Mts</ion-label>\n        <ion-input (keyup)="setVolumenInline()"\n                   type="number" formControlName="diametro_2" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label floating>Largo en Mts</ion-label>\n        <ion-input (keyup)="setVolumenInline()"\n                   type="number" formControlName="largo" placeholder=""></ion-input>\n      </ion-item>\n\n      <ion-item style="margin-top:10px">\n        <ion-label style="padding-bottom:8px">Volumen: {{ volumen }} m3</ion-label>\n      </ion-item>\n\n      <!-- <ion-item>\n        <ion-label floating>Código Rollo</ion-label>\n        <ion-input type="text" formControlName="codigo_rollo" placeholder=""></ion-input>\n      </ion-item> -->\n\n      <ion-item>\n        <button style="margin-bottom:20px; height:35px" [disabled]="!formaLinea.valid"\n                ion-button full (click)="saveLocalInforme()">Guardar Registro de APEO</button>\n      </ion-item>\n\n    </form>\n\n  </ion-list>\n\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/contact/contact.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_5__providers_services_login_services_login__["a" /* ServicesLoginProvider */],
@@ -317,7 +361,17 @@ var HomePage = /** @class */ (function () {
         this._login.login(this.loginForm.value)
             .subscribe(function (resp) {
             console.log(resp.length);
+            console.log(resp[0].cuit);
+            _this._login.cuit = resp[0].cuit;
             if (resp.length > 0) {
+                var volumenes = {
+                    A: null,
+                    B: null,
+                    C: null
+                };
+                if (!localStorage.getItem('volumenes')) {
+                    localStorage.setItem('volumenes', JSON.stringify(volumenes));
+                }
                 _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__about_about__["a" /* AboutPage */]);
             }
             else {
@@ -337,7 +391,7 @@ var HomePage = /** @class */ (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>Forestal</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n\n<ion-content padding class="text-center">\n\n  <ion-card color=primary>\n    <ion-card-content>\n      Porfavor identifiquese con su usuario y contraseña\n    </ion-card-content>\n  </ion-card>\n\n\n\n  <form [formGroup]="loginForm">\n\n  <ion-list>\n\n    <ion-item>\n      <ion-label floating>ID</ion-label>\n      <ion-input formControlName="user" type="number"></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating>Contraseña</ion-label>\n      <ion-input formControlName="pass" type="number"></ion-input>\n    </ion-item>\n\n  </ion-list>\n\n  <div padding>\n    <button style="margin-bottom:20px" (click)="login()"\n            color="primary" ion-button block>Ingresar</button>\n\n    <button *ngIf="islogin" ion-button block color="danger">El usuario o la contraseña no existen</button>\n  </div>\n\n  </form>\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>Código R - Sistema de Trazabilidad</ion-title>\n  </ion-navbar>\n</ion-header>\n\n\n\n<ion-content padding class="text-center">\n\n  <ion-card color=primary>\n    <ion-card-content>\n      Porfavor identifiquese con su usuario y contraseña\n    </ion-card-content>\n  </ion-card>\n\n\n\n  <form [formGroup]="loginForm">\n\n  <ion-list>\n\n    <ion-item>\n      <ion-label floating>ID</ion-label>\n      <ion-input formControlName="user" type="number"></ion-input>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating>Contraseña</ion-label>\n      <ion-input formControlName="pass" type="number"></ion-input>\n    </ion-item>\n\n  </ion-list>\n\n  <div padding>\n    <button style="margin-bottom:20px" (click)="login()"\n            color="primary" ion-button block>Ingresar</button>\n\n    <button *ngIf="islogin" ion-button block color="danger">El usuario o la contraseña no existen</button>\n  </div>\n\n  </form>\n\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_4__providers_services_login_services_login__["a" /* ServicesLoginProvider */],
@@ -497,6 +551,7 @@ var ServicesLoginProvider = /** @class */ (function () {
         this.apiSaveInformes = 'http://appsausol.com.ar.elserver.com/forestal/saveInformes.php';
         this.apiSaveEncabezados = 'http://appsausol.com.ar.elserver.com/forestal/saveEncabezados.php';
         this.apiUrlEspecies = 'http://appsausol.com.ar.elserver.com/forestal/especies.php';
+        this.apiUrlEspecie = 'http://appsausol.com.ar.elserver.com/forestal/especie.php';
         this.apiUrlRequerimientos = 'http://appsausol.com.ar.elserver.com/forestal/requerimientos.php';
         this.apiUrlRequerimiento = 'http://appsausol.com.ar.elserver.com/forestal/requerimiento.php';
         this.apiUrlNotas = 'http://appsausol.com.ar.elserver.com/getCuentas.php';
@@ -523,9 +578,9 @@ var ServicesLoginProvider = /** @class */ (function () {
             console.log(err);
         });
     };
-    ServicesLoginProvider.prototype.getRequerimientos = function () {
+    ServicesLoginProvider.prototype.getRequerimientos = function (cuit) {
         console.log();
-        return this.http.get(this.apiUrlRequerimientos)
+        return this.http.get(this.apiUrlRequerimiento + '?cuit=' + cuit)
             .map(function (res) {
             return res;
         }, function (err) {
@@ -535,6 +590,15 @@ var ServicesLoginProvider = /** @class */ (function () {
     ServicesLoginProvider.prototype.getEspecies = function () {
         console.log();
         return this.http.get(this.apiUrlEspecies)
+            .map(function (res) {
+            return res;
+        }, function (err) {
+            console.log(err);
+        });
+    };
+    ServicesLoginProvider.prototype.getEspecie = function (id) {
+        console.log();
+        return this.http.get(this.apiUrlEspecie + '?id=' + id)
             .map(function (res) {
             return res;
         }, function (err) {
@@ -651,7 +715,7 @@ var ServicesLoginProvider = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_services_login_services_login__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs__ = __webpack_require__(382);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs__ = __webpack_require__(381);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_file__ = __webpack_require__(156);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_file_transfer__ = __webpack_require__(154);
@@ -696,7 +760,7 @@ var AboutPage = /** @class */ (function () {
     }
     AboutPage.prototype.sincronizar = function () {
         var _this = this;
-        this._login.getRequerimientos()
+        this._login.getRequerimientos(this._login.cuit)
             .subscribe(function (resp) {
             // console.log(resp)
             _this.requerimientos = resp;
@@ -811,7 +875,7 @@ var AboutPage = /** @class */ (function () {
     };
     AboutPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-about',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar hideBackButton color=primary>\n    <ion-title>\n      Requerimientos\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-card>\n\n    <ion-card-content color="primary">\n      No se encuentran requerimientos. Sincronice la aplicación para comenzar a trabajar\n    </ion-card-content>\n\n  </ion-card>\n\n  <div padding *ngIf="!sincronizado">\n    <button ion-button icon-start block (click)="sincronizar()">\n      <ion-icon name="ios-cloud-download"></ion-icon>\n      Descargar información\n    </button>\n  </div>\n\n  <div padding *ngIf="sincronizado">\n    <button ion-button color="secondary" icon-start block (click)="sincronizarUp()">\n      <ion-icon name="ios-cloud-upload"></ion-icon>\n      Subir información\n    </button>\n  </div>\n\n  <ion-list>\n    <ion-item *ngFor="let requerimiento of requerimientos">\n     <h2>{{requerimiento.lote}}</h2>\n     <p>{{requerimiento.nomenclatura_catastral}}</p>\n     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver requerimiento</button>\n   </ion-item>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/
+            selector: 'page-about',template:/*ion-inline-start:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar hideBackButton color=primary>\n    <ion-title>\n      Nomenclatura Catastral\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-card>\n\n    <ion-card-content color="primary">\n      No se encuentran requerimientos. Sincronice la aplicación para comenzar a trabajar\n    </ion-card-content>\n\n  </ion-card>\n\n  <div padding *ngIf="!sincronizado">\n    <button ion-button icon-start block (click)="sincronizar()">\n      <ion-icon name="ios-cloud-download"></ion-icon>\n      Descargar información\n    </button>\n  </div>\n\n  <div padding *ngIf="sincronizado">\n    <button ion-button color="secondary" icon-start block (click)="sincronizarUp()">\n      <ion-icon name="ios-cloud-upload"></ion-icon>\n      Subir información\n    </button>\n  </div>\n\n  <ion-list>\n    <ion-item *ngFor="let requerimiento of requerimientos">\n     <h2>{{requerimiento.lote}}</h2>\n     <p>{{requerimiento.nomenclatura_catastral}}</p>\n     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver</button>\n   </ion-item>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/diego/Documentos/Forestal/src/pages/about/about.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_2__providers_services_login_services_login__["a" /* ServicesLoginProvider */],

@@ -53,7 +53,7 @@ export class AboutPage {
   }
 
   sincronizar() {
-    this._login.getRequerimientos()
+    this._login.getRequerimientos(this._login.cuit)
         .subscribe( (resp:any)=>{
           // console.log(resp)
           this.requerimientos = resp;

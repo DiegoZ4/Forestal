@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar hideBackButton color=primary>
     <ion-title>
-      Requerimientos
+      Nomenclatura Catastral
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -33,7 +33,7 @@
     <ion-item *ngFor="let requerimiento of requerimientos">
      <h2>{{requerimiento.lote}}</h2>
      <p>{{requerimiento.nomenclatura_catastral}}</p>
-     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver requerimiento</button>
+     <button ion-button clear item-end (click)="goToMyPage(requerimiento.id)">Ver</button>
    </ion-item>
   </ion-list>
 </ion-content>
