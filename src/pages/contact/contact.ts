@@ -54,12 +54,15 @@ export class ContactPage {
     this.id = this.navParams.get('id');
     this.nro_requerimiento = this.navParams.get('nro_requerimiento');
     this.informe = this.navParams.get('informe');
+    
+    this.especies = JSON.parse(localStorage.getItem('especies'));
+    console.log(this.especies);
 
-    this._login.getEspecies()
-        .subscribe( (resp:any)=>{
-          this.especies = resp;
-          console.log(this.especies)
-        })
+    // this._login.getEspecies()
+    //     .subscribe( (resp:any)=>{
+    //       this.especies = resp;
+    //       console.log(this.especies)
+    //     })
 
     this.formaLinea = new FormGroup({
           nro_requerimiento: new FormControl(this.nro_requerimiento, Validators.required),

@@ -28,6 +28,7 @@ export class AboutPage {
   sincronizadoUp:boolean = false;
 
   errorFoto:boolean = null;
+  especies: any;
 
   constructor(
               public navCtrl: NavController,
@@ -59,7 +60,17 @@ export class AboutPage {
           this.requerimientos = resp;
           localStorage.setItem('requerimientos', JSON.stringify(this.requerimientos))
           if(this.requerimientos){
-            this.sincronizado = true;
+            this._login.getEspecies()
+              .subscribe( (resp:any)=>{
+                this.especies = resp;
+                console.log(this.especies)
+                localStorage.setItem('especies', JSON.stringify(this.especies))
+              })
+              
+              if(this.especies) {
+                this.sincronizado = true;
+              }
+            
           }
         })
   }
